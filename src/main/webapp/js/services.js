@@ -120,7 +120,7 @@ filter('truncate', function () {
     };
 }).filter('dateformat', function () {
     return function (text, length, end) {
-        return new Date(text).toUTCString();
+        return new Date(text).toLocaleString();
     };
 }).filter('startFrom', function() {
     return function(input, start) {
