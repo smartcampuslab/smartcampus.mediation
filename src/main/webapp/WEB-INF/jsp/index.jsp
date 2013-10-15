@@ -19,9 +19,6 @@ body {
 .sidebar-nav {
 	padding: 9px 0;
 }
-
-
- 
 </style>
 <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 <script
@@ -51,14 +48,53 @@ body {
 		<!-- 		<div class="alert alert-error" ng-show="error != ''">{{error}}</div> -->
 		<!-- 		<div class="alert alert-success" ng-show="info != ''">{{info}}</div> -->
 
-
+<div class="aParent">
 		<div class="span12">
 			Filtra commenti per: <input type="search" ng-model="q"
 				placeholder="filter apps..." />
 
+			<br></br>
+			
+			
+			<div>
+				<div class="btn-group">
+					
+					<button class="btn btn-medium">Ordina i commenti per:</button>
+					<button class="btn btn-medium dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a ng-click=" href="#">Applicazione</a></li>
+						<li><a ng-click="sortFalsePortal() href="#">Data inserimento</a></li>
+						<li><a ng-click="sortTruePortal() href="#">Approvato da portale</a></li>
+						<li><a ng-click="sortTrueParsing() href="#">Approvato da parsing</a></li>
+						<li><a ng-click="sortFalsePortal() href="#">Non approvato da portale</a></li>
+						<li><a ng-click="sortFalseParsing() href="#">Non approvato da parsing</a></li>
+					</ul>
+				</div>
+			</div>
+			
+</div>			
+			
+			<div>
+				<div class="btn-group">
+					
+					<button class="btn btn-medium">Ordina i commenti per:</button>
+					<button class="btn btn-medium dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a ng-click="sortFalsePortal() href="#">Applicazione</a></li>
+						<li><a ng-click="sortFalsePortal() href="#">Data inserimento</a></li>
+						<li><a ng-click="sortTruePortal() href="#">Approvato da portale</a></li>
+						<li><a ng-click="sortTrueParsing() href="#">Approvato da parsing</a></li>
+						<li><a ng-click="sortFalsePortal() href="#">Non approvato da portale</a></li>
+						<li><a ng-click="sortFalseParsing() href="#">Non approvato da parsing</a></li>
+					</ul>
+				</div>
+			</div>
 
-
-
+			<br></br>
 
 			<table class="table table-striped table-condensed">
 				<thead>
@@ -78,7 +114,7 @@ body {
 					<tr>
 						<td>{{comment.webappname}}</td>
 						<td>{{comment.timestamp | dateformat}}</td>
-						<td>{{comment.entityId}}</td>						
+						<td>{{comment.entityId}}</td>
 						<td>{{comment.entityTesto|truncate}}</td>
 						<td ng-switch on="comment.parseApproved"><span
 							ng-switch-when="true">
@@ -92,7 +128,8 @@ body {
 									<ul class="dropdown-menu">
 										<li><a href="" ng-click="editNote(comment._id)"><i
 												class="icon-fixed-width icon-pencil"></i> Edit</a></li>
-										<li><a href=""  ng-click="changeParseApproved(comment._id)"><i
+										<li><a href=""
+											ng-click="changeParseApproved(comment._id)"><i
 												class="icon-fixed-width icon-ban-circle"></i> Block</a></li>
 									</ul>
 								</div>
@@ -108,7 +145,8 @@ body {
 									<ul class="dropdown-menu">
 										<li><a href="" ng-click="editNote(comment._id)"><i
 												class="icon-fixed-width icon-pencil"></i> Edit</a></li>
-										<li><a href=""  ng-click="changeParseApproved(comment._id)"><i
+										<li><a href=""
+											ng-click="changeParseApproved(comment._id)"><i
 												class="icon-fixed-width icon-comment-alt"></i> Approved</a></li>
 									</ul>
 								</div>
@@ -130,7 +168,8 @@ body {
 									<ul class="dropdown-menu">
 										<li><a href="" ng-click="editNote(comment._id)"><i
 												class="icon-fixed-width icon-pencil"></i> Edit</a></li>
-										<li><a href=""  ng-click="changeMediationApproved(comment._id)"><i
+										<li><a href=""
+											ng-click="changeMediationApproved(comment._id)"><i
 												class="icon-fixed-width icon-ban-circle"></i> Block</a></li>
 									</ul>
 								</div>
@@ -144,12 +183,13 @@ body {
 									<ul class="dropdown-menu">
 										<li><a href="" ng-click="editNote(comment._id)"><i
 												class="icon-fixed-width icon-pencil"></i> Edit</a></li>
-										<li><a href=""  ng-click="changeMediationApproved(comment._id)"><i
+										<li><a href=""
+											ng-click="changeMediationApproved(comment._id)"><i
 												class="icon-fixed-width icon-comment-alt"></i> Approved</a></li>
 									</ul>
 								</div>
 						</span>
-						<td>{{comment.note}}</td>
+							<td>{{comment.note}}</td>
 					</tr>
 
 
@@ -164,11 +204,11 @@ body {
 			<button class="btn btn-primary"
 				ng-disabled="currentPage >= comments.length/pageSize - 1"
 				ng-click="currentPage=currentPage+1">Next</button>
-		</div>
-	</div>
+		</div></div>
 
 
 <!-- the triggers -->
+
 
 
 
