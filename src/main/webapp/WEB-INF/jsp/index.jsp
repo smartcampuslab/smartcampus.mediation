@@ -77,7 +77,7 @@ body {
 					ng-repeat="comment in comments | filter:q  | startFrom:currentPage*pageSize | limitTo:pageSize">
 					<tr>
 						<td>{{comment.webappname}}</td>
-						<td>{{comment.timestamp|dateformat}}</td>
+						<td>{{comment.timestamp | dateformat}}</td>
 						<td>{{comment.entityId}}</td>						
 						<td>{{comment.entityTesto|truncate}}</td>
 						<td ng-switch on="comment.parseApproved"><span
@@ -176,3 +176,4 @@ body {
 
 </body>
 </html>
+

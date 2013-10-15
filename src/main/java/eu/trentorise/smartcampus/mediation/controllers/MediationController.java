@@ -38,10 +38,11 @@ import eu.trentorise.smartcampus.mediation.model.MessageToMediationService;
 
 @Controller
 public class MediationController {
+	
+	
 	@Autowired
 	MongoTemplate db;
 
-	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/parseapproved/add")
 	public @ResponseBody
