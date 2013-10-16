@@ -42,8 +42,6 @@ public class MediationController {
 
 	@Autowired
 	MongoTemplate db;
-	
-	
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/parseapproved/add")
 	public @ResponseBody
@@ -68,6 +66,20 @@ public class MediationController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 
 		return db.find(query2, MessageToMediationService.class);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/application/{sort_by}")
+	public @ResponseBody
+	List<MessageToMediationService> getCommentoFileredByApp(
+			HttpServletRequest request, @PathVariable String sort_by) {
+
+		Query queryFilterApp = new Query();
+		queryFilterApp.addCriteria(Criteria.where("app_name").is(sort_by));
+		MessageToMediationService mediationService = db.findOne(queryFilterApp,
+				MessageToMediationService.class);
+		queryFilterApp.sort().on(sort_by, Order.DESCENDING);
+
+		return db.find(queryFilterApp, MessageToMediationService.class);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/note/add")
@@ -105,8 +117,6 @@ public class MediationController {
 		// controllo se il commento è stato approvato nei 2 livelli
 		if (mediationService.isParseApproved()
 				&& mediationService.isMediationApproved()) {
-			
-			
 
 		}
 
@@ -138,24 +148,20 @@ public class MediationController {
 		return true;
 
 	}
-	
-	
-	
+
 	private void setCommentApprovedTo(
-			MessageToMediationService messageToMediationService)  {
-		
-		
+			MessageToMediationService messageToMediationService) {
+
 		try {
-			//RemoteConnector.postJSON(
+			// RemoteConnector.postJSON(
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		} catch (RemoteException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// } catch (RemoteException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 	}
-	
 
 }

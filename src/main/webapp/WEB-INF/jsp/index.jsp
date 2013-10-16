@@ -48,49 +48,77 @@ body {
 		<!-- 		<div class="alert alert-error" ng-show="error != ''">{{error}}</div> -->
 		<!-- 		<div class="alert alert-success" ng-show="info != ''">{{info}}</div> -->
 
-<div class="aParent">
-		<div class="span12">
-			Filtra commenti per: <input type="search" ng-model="q"
-				placeholder="filter apps..." />
+		<div class="row">
+			<div class="span12">
 
-			<br></br>
-			
-			
-			<div>
-				<div class="btn-group">
+
+				<div>
+				<!-- 	<div class="btn-group">
+
+						<button class="btn btn-medium">Filtra commenti per:</button>
+						<button class="btn btn-medium dropdown-toggle"
+							data-toggle="dropdown">
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a ng-click="filterByApplication(order_by)" href="#">Applicazione</a></li>
+							<li><a ng-click="filterByDate(order_by)" href="#">Data inserimento</a></li>
+							<li><a ng-click="filterByPortalApproved(order_by)" href="#">Approvato da portale</a></li>
+							<li><a ng-click="filterByParsingApproved(order_by)" href="#">Approvato da parsing</a></li>
+							<li><a ng-click="filterByPortalNotApproved(order_by)" href="#">Non approvato da portale</a></li>
+							<li><a ng-click="filterByParsingNotApproved(order_by)" href="#">Non approvato da parsing</a></li>
+						</ul>
+					</div>
 					
-					<button class="btn btn-medium">Ordina i commenti per:</button>
-					<button class="btn btn-medium dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a ng-click=" href="#">Applicazione</a></li>
-						<li><a ng-click="sortFalsePortal() href="#">Data inserimento</a></li>
-						<li><a ng-click="sortTruePortal() href="#">Approvato da portale</a></li>
-						<li><a ng-click="sortTrueParsing() href="#">Approvato da parsing</a></li>
-						<li><a ng-click="sortFalsePortal() href="#">Non approvato da portale</a></li>
-						<li><a ng-click="sortFalseParsing() href="#">Non approvato da parsing</a></li>
-					</ul>
+					
+					 <select ng-model="filter_by" bs-selectbox >
+						<option value="webappname" ng-click="filterByApplication(order_by)" selected="selected">Applicazione</option>
+						<option value="timestamp">Data inserimento</option>
+						<option value="entityTesto" selected="selected">Testo</option>
+						<option value="mediationNotApproved">Approvato da portale</option>
+						<option value="parseApproved">Approvato da parsing</option>
+						<option value="mediationNotApproved">Non approvato da portale</option>
+						<option value="parseNotApproved">Non approvato da parsing</option>
+					</select>
+					-->
+					Filtra:
+					<input type="search" ng-model="q" placeholder="filter apps..." />
+
 				</div>
+
+
+
+
+				<br></br>
+
+
+
+
 			</div>
-			
-</div>			
-			
+
 			<div>
 				<div class="btn-group">
-					
-					<button class="btn btn-medium">Ordina i commenti per:</button>
+					<select ng-model="order_by" bs-selectbox >
+						<option value="webappname" selected="selected">Applicazione</option>
+						<option value="timestamp">Data inserimento</option>
+						<option value="mediationNotApproved">Approvato da portale</option>
+						<option value="parseApproved">Approvato da parsing</option>
+						<option value="mediationNotApproved">Non approvato da portale</option>
+						<option value="parseNotApproved">Non approvato da parsing</option>
+					</select>
+
+					<!-- <button class="btn btn-medium">Ordina i commenti per:</button>
 					<button class="btn btn-medium dropdown-toggle" data-toggle="dropdown">
 						<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu">
-						<li><a ng-click="sortFalsePortal() href="#">Applicazione</a></li>
-						<li><a ng-click="sortFalsePortal() href="#">Data inserimento</a></li>
-						<li><a ng-click="sortTruePortal() href="#">Approvato da portale</a></li>
-						<li><a ng-click="sortTrueParsing() href="#">Approvato da parsing</a></li>
-						<li><a ng-click="sortFalsePortal() href="#">Non approvato da portale</a></li>
-						<li><a ng-click="sortFalseParsing() href="#">Non approvato da parsing</a></li>
-					</ul>
+					<ul class="dropdown-menu" data-ng-model="selectedOption">
+						<li><a ng-model="webapp" value="webapp" selected="selected">Applicazione</option>
+						<li><a ng-click="sortFalsePortal()" href="#">Data inserimento</a></li>
+						<li><a ng-click="sortTruePortal()" href="#">Approvato da portale</a></li>
+						<li><a ng-click="sortTrueParsing()" href="#">Approvato da parsing</a></li>
+						<li><a ng-click="sortFalsePortal()" href="#">Non approvato da portale</a></li>
+						<li><a ng-click="sortFalseParsing()" href="#">Non approvato da parsing</a></li>
+					</ul>-->
 				</div>
 			</div>
 
@@ -102,6 +130,7 @@ body {
 						<th>Applicazione</th>
 						<th>Data inserimento</th>
 						<th>ID commento</th>
+						<th>ID user</th>
 						<th>Testo</th>
 						<th>Approvato da controllo automatico</th>
 						<th>Approvato da portale</th>
@@ -115,6 +144,7 @@ body {
 						<td>{{comment.webappname}}</td>
 						<td>{{comment.timestamp | dateformat}}</td>
 						<td>{{comment.entityId}}</td>
+						<td>{{comment.userid}}</td>
 						<td>{{comment.entityTesto|truncate}}</td>
 						<td ng-switch on="comment.parseApproved"><span
 							ng-switch-when="true">
@@ -189,7 +219,7 @@ body {
 									</ul>
 								</div>
 						</span>
-							<td>{{comment.note}}</td>
+						<td>{{comment.note}}</td>
 					</tr>
 
 
@@ -204,16 +234,11 @@ body {
 			<button class="btn btn-primary"
 				ng-disabled="currentPage >= comments.length/pageSize - 1"
 				ng-click="currentPage=currentPage+1">Next</button>
-		</div></div>
+		</div>
+	</div>
 
 
-<!-- the triggers -->
-
-
-
-
-
-
+	<!-- the triggers -->
 </body>
 </html>
 

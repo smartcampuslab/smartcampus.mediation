@@ -44,13 +44,13 @@
 
 	<!-- Cloudfoundry uses mongo db-factory to generate a mongo database to 
 		bind with deployed service -->
-<!-- 	<mongo:db-factory id="factory" dbname="${smartcampus.vas.web.mongo.db}" -->
-<!-- 		mongo-ref="mongo" /> -->
+ 	<mongo:db-factory id="factory" dbname="${smartcampus.vas.web.mongo.db}" 
+ 		mongo-ref="mongo" /> 
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		 <constructor-arg ref="mongo" /> 
-		 <constructor-arg name="databaseName" value="${smartcampus.vas.web.mongo.db}" /> 
-		<!-- <constructor-arg name="mongoDbFactory" ref="factory" />-->
+	 	 <constructor-arg name="databaseName" value="${smartcampus.vas.web.mongo.db}" /> 
+		 <!--<constructor-arg name="mongoDbFactory" ref="factory" /> -->
 	</bean>
 		
 </beans>
