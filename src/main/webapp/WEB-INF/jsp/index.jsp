@@ -44,7 +44,7 @@ body {
 
 	<div ng-controller="commentController" class="container"
 		style="text-align: center; padding-top: 5%;">
-		<h1>Comment</h1>
+		<h1>Comment</h1><br/><br/>
 		<!-- 		<div class="alert alert-error" ng-show="error != ''">{{error}}</div> -->
 		<!-- 		<div class="alert alert-success" ng-show="info != ''">{{info}}</div> -->
 
@@ -83,22 +83,10 @@ body {
 					-->
 					Filtra:
 					<input type="search" ng-model="q" placeholder="filter apps..." />
-
-				</div>
-
-
-
-
-				<br></br>
-
-
-
-
-			</div>
-
-			<div>
-				<div class="btn-group">
-					<select ng-model="order_by" bs-selectbox >
+					Ordina per (Non attivo) :  
+					<div class="btn-group">
+					
+					<select ng-model="order_by" bs-selectbox >					
 						<option value="webappname" selected="selected">Applicazione</option>
 						<option value="timestamp">Data inserimento</option>
 						<option value="mediationNotApproved">Approvato da portale</option>
@@ -120,7 +108,17 @@ body {
 						<li><a ng-click="sortFalseParsing()" href="#">Non approvato da parsing</a></li>
 					</ul>-->
 				</div>
+<br/><br/><br/>
+				</div>
+
+
+
+
+
+
 			</div>
+
+	
 
 			<br></br>
 
