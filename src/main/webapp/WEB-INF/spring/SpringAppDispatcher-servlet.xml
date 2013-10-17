@@ -48,9 +48,9 @@
  		mongo-ref="mongo" /> 
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		 <constructor-arg ref="mongo" /> 
-	 	 <constructor-arg name="databaseName" value="${smartcampus.vas.web.mongo.db}" /> 
-		 <!--<constructor-arg name="mongoDbFactory" ref="factory" /> -->
+<!-- 		 <constructor-arg ref="mongo" />  -->
+<!-- 	 	 <constructor-arg name="databaseName" value="${smartcampus.vas.web.mongo.db}" />  -->
+		 <constructor-arg name="mongoDbFactory" ref="factory" />
 	</bean>
 		
 </beans>

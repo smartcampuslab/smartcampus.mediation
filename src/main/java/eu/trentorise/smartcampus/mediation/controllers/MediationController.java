@@ -58,12 +58,26 @@ public class MediationController {
 		return db.findOne(query2, MessageToMediationService.class) != null;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/all")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parsenotapproved//all")
 	public @ResponseBody
-	List<MessageToMediationService> getCommento(HttpServletRequest request) {
+	List<MessageToMediationService> getCommentoPA(HttpServletRequest request) {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
+		query2.addCriteria(Criteria.where("parseApproved").is(false));
+		
+
+		return db.find(query2, MessageToMediationService.class);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/all")
+	public @ResponseBody
+	List<MessageToMediationService> getCommentoMA(HttpServletRequest request) {
+
+		Query query2 = new Query();
+		query2.sort().on("timestamp", Order.DESCENDING);
+		query2.addCriteria(Criteria.where("parseApproved").is(true));
+		
 
 		return db.find(query2, MessageToMediationService.class);
 	}
@@ -99,30 +113,7 @@ public class MediationController {
 		return true;
 
 	}
-
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/parseapproved/change")
-	public @ResponseBody
-	boolean changeParseApproved(HttpServletRequest request,
-			@PathVariable String _id) {
-
-		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("_id").is(_id));
-		MessageToMediationService mediationService = db.findOne(query2,
-				MessageToMediationService.class);
-
-		mediationService.setParseApproved(!mediationService.isParseApproved());
-
-		db.save(mediationService);
-
-		// controllo se il commento è stato approvato nei 2 livelli
-		if (mediationService.isParseApproved()
-				&& mediationService.isMediationApproved()) {
-
-		}
-
-		return true;
-
-	}
+	
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/mediationapproved/change")
 	public @ResponseBody
