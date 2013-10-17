@@ -83,11 +83,11 @@ body {
 					-->
 					Filtra:
 					<input type="search" ng-model="q" placeholder="filter apps..." />
-					Ordina per (Non attivo) :  
-					<div class="btn-group">
-					
-					<select ng-model="order_by" bs-selectbox >					
-						<option value="webappname" selected="selected">Applicazione</option>
+
+					Ordina per (Non attivo) :  				
+				<div class="btn-group">
+					<select ng-model="order_by" bs-selectbox">
+						<option value="webappname" selected>Applicazione</option>
 						<option value="timestamp">Data inserimento</option>
 						<option value="mediationNotApproved">Approvato da portale</option>
 						<option value="parseApproved">Approvato da parsing</option>
@@ -108,15 +108,9 @@ body {
 						<li><a ng-click="sortFalseParsing()" href="#">Non approvato da parsing</a></li>
 					</ul>-->
 				</div>
+
 <br/><br/><br/>
-				</div>
 
-
-
-
-
-
-			</div>
 
 	
 
