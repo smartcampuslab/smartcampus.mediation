@@ -1,15 +1,24 @@
 package eu.trentorise.smartcampus.mediation.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KeyWord {
 	
 	private String id;
-	private String key;
-	private boolean enabled;
+	private String key;	
+	private long timestamp;
+	private List<String> apps;
 	
+	public KeyWord() {
+		
+	}
 
-	public KeyWord(String key) {
+	public KeyWord(String key,String app) {
+		this.apps=new ArrayList<String>();
 		this.key=key;
-		this.enabled=true;
+		this.apps.add(app);
+		this.timestamp=System.currentTimeMillis();
 	}
 
 
@@ -33,13 +42,28 @@ public class KeyWord {
 	}
 
 
-	public boolean isEnabled() {
-		return enabled;
+	
+
+	public long getTimestamp() {
+		return timestamp;
 	}
 
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
+
+
+	public List<String> getApps() {
+		return apps;
+	}
+
+
+	public void setApps(List<String> apps) {
+		this.apps = apps;
+	}
+	
+
+
 
 }

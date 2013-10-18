@@ -22,9 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,43 +40,93 @@ public class KeyWordsController {
 	@Autowired
 	MongoTemplate db;
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/key/add")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/key/{app}/add")
 	public @ResponseBody
-	boolean addKey(HttpServletRequest request, @RequestParam("key")  String key) {
-		
-		KeyWord keyWord=new KeyWord(key);
-		
-		db.save(keyWord);
+	boolean addKey(HttpServletRequest request, @RequestParam("key") String key,@PathVariable String app) {
 
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("key").is(key));
+		KeyWord toDelete = (KeyWord) db.findOne(query2, KeyWord.class);
+		
+		//base case not in db
+		if (toDelete == null) {
+			KeyWord keyWord = new KeyWord(key,app);
+			db.save(keyWord);
+			return true;
+		}else{
+			//in db 
+			if(toDelete.getApps().contains(app)){
+				//in db and for this app
+				return true;
+			}else{
+				//in db but not for this app
+				toDelete.getApps().add(app);
+				return true;
+			}
+		}
 		
 		
-		return true;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/all")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/{app}/all")
 	public @ResponseBody
-	List<KeyWord> getKey(HttpServletRequest request) {
+	List<KeyWord> getKey(HttpServletRequest request,@PathVariable String app) {
 
-		Query query2 = new Query();		
-		//query2.addCriteria(Criteria.where("parseApproved").is(false));
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("apps").in(app));
 		
 
 		return db.find(query2, KeyWord.class);
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/key/{key}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/all")
 	public @ResponseBody
-	boolean deleteKey(HttpServletRequest request, @PathVariable String key) {
+	List<KeyWord> getAllKey(HttpServletRequest request) {
 
 		Query query2 = new Query();
 		
+
+		return db.find(query2, KeyWord.class);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/key/{app}")
+	public @ResponseBody
+	boolean deleteKey(HttpServletRequest request,@RequestBody String key,@PathVariable String app) {
+
+		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("key").is(key));
-		KeyWord toDelete=(KeyWord) db.find(query2, KeyWord.class);
-		toDelete.setEnabled(false);
+		
+		KeyWord toDelete = (KeyWord) db.findOne(query2, KeyWord.class);
+		
+		Query query3 = new Query();
+		query3.addCriteria(Criteria.where("key").is(key));
+		query3.addCriteria(Criteria.where("apps").in(app));
+
+		if(db.findOne(query3, KeyWord.class)!=null){
+			toDelete.getApps().remove(app);
+		}else{
+			toDelete.getApps().add(app);
+		}
+		toDelete.setTimestamp(System.currentTimeMillis());
 
 		db.save(toDelete);
 		return true;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/{app}/{data}")
+	public @ResponseBody
+	List<KeyWord> getDeltaKey(HttpServletRequest request, @PathVariable String app, @PathVariable long data) {
+
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("timestamp").gte(data));
+		query2.addCriteria(Criteria.where("apps").in(app));
+
+		
+		
+
+		return db.find(query2, KeyWord.class);
+	}
 	
+	
+
 }

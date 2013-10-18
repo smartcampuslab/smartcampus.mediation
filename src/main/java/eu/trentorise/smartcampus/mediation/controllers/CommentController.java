@@ -35,12 +35,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.trentorise.smartcampus.mediation.model.MessageToMediationService;
 
 @Controller
-public class MediationController {
+public class CommentController {
 
 	@Autowired
 	MongoTemplate db;
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/parseapproved/add")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/add")
 	public @ResponseBody
 	boolean addCommento(HttpServletRequest request,
 			@RequestBody String messageToMediationService) {
@@ -55,26 +55,27 @@ public class MediationController {
 		return db.findOne(query2, MessageToMediationService.class) != null;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parsenotapproved//all")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parsenotapproved/{app}/all")
 	public @ResponseBody
-	List<MessageToMediationService> getCommentoPA(HttpServletRequest request) {
+	List<MessageToMediationService> getCommentoPA(HttpServletRequest request,@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("parseApproved").is(false));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 		
 
 		return db.find(query2, MessageToMediationService.class);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/all")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/{app}/all")
 	public @ResponseBody
-	List<MessageToMediationService> getCommentoMA(HttpServletRequest request) {
+	List<MessageToMediationService> getCommentoMA(HttpServletRequest request,@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("parseApproved").is(true));
-		
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, MessageToMediationService.class);
 	}
