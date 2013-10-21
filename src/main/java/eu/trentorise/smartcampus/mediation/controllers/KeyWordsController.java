@@ -121,7 +121,21 @@ public class KeyWordsController {
 		query2.addCriteria(Criteria.where("timestamp").gte(data));
 		query2.addCriteria(Criteria.where("apps").in(app));
 
+		//pass all the key or only the reference?
 		
+
+		return db.find(query2, KeyWord.class);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/{data}")
+	public @ResponseBody
+	List<KeyWord> getDeltaKey(HttpServletRequest request,
+			@PathVariable long data) {
+
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("timestamp").gte(data));
+		
+		//pass all the key or only the reference?
 		
 
 		return db.find(query2, KeyWord.class);
