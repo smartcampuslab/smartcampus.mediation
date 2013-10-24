@@ -266,10 +266,10 @@
 
 							<table>
 								<tr ng:repeat="allkeyword in allkeyList | filter:f">
-									<td><span ng:click="select(allkeyword)">{{allkeyword.key}}</span>
+									<td><span ng:click="select(allkeyword)">{{allkeyword.keyword}}</span>
 									</td>
 									<td><span> <a href=""
-											ng-click="change(allkeyword.key)"><i
+											ng-click="change(allkeyword.keyword)"><i
 												class="icon-fixed-width icon-plus"></i> </a></span></td>
 								</tr>
 							</table>
@@ -289,10 +289,10 @@
 
 							<table>
 								<tr ng:repeat="keyword in keyList | filter:p">
-									<td><span ng:click="select(keyword)">{{keyword.key}}</span>
+									<td><span ng:click="select(keyword)">{{keyword.keyword}}</span>
 									</td>
 									<td><span> <a href=""
-											ng-click="change(keyword.key)"><i
+											ng-click="change(keyword.keyword)"><i
 												class="icon-fixed-width icon-remove"></i> </a></span></td>
 								</tr>
 							</table>

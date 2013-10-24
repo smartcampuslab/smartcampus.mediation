@@ -45,7 +45,7 @@ public class KeyWordsController {
 			@PathVariable String app) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("key").is(key));
+		query2.addCriteria(Criteria.where("keyword").is(key));
 		KeyWord toDelete = (KeyWord) db.findOne(query2, KeyWord.class);
 
 		// base case not in db
@@ -92,12 +92,12 @@ public class KeyWordsController {
 			@PathVariable String app) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("key").is(key));
+		query2.addCriteria(Criteria.where("keyword").is(key));
 
 		KeyWord toDelete = (KeyWord) db.findOne(query2, KeyWord.class);
 
 		Query query3 = new Query();
-		query3.addCriteria(Criteria.where("key").is(key));
+		query3.addCriteria(Criteria.where("keyword").is(key));
 		query3.addCriteria(Criteria.where("apps").in(app));
 
 		if (db.findOne(query3, KeyWord.class) != null) {
@@ -105,7 +105,7 @@ public class KeyWordsController {
 		} else {
 			toDelete.getApps().add(app);
 		}
-		toDelete.setTimestamp(System.currentTimeMillis());
+		toDelete.setTimeupdate(System.currentTimeMillis());
 
 		db.save(toDelete);
 		return true;
@@ -117,7 +117,7 @@ public class KeyWordsController {
 			@PathVariable String app, @PathVariable long data) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("timestamp").gte(data));
+		query2.addCriteria(Criteria.where("timeupdate").gte(data));
 		query2.addCriteria(Criteria.where("apps").in(app));
 
 		// pass all the key or only the reference?
@@ -131,7 +131,7 @@ public class KeyWordsController {
 			@PathVariable long data) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("timestamp").gte(data));
+		query2.addCriteria(Criteria.where("timeupdate").gte(data));
 
 		// pass all the key or only the reference?
 

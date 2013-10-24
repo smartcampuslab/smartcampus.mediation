@@ -6,8 +6,8 @@ import java.util.List;
 public class KeyWord {
 
 	private String id;
-	private String key;
-	private long timestamp;
+	private String keyword;
+	private long timeupdate;
 	private List<String> apps;
 
 	public KeyWord() {
@@ -16,9 +16,9 @@ public class KeyWord {
 
 	public KeyWord(String key, String app) {
 		this.apps = new ArrayList<String>();
-		this.key = key;
+		this.setKeyword(key);
 		this.apps.add(app);
-		this.timestamp = System.currentTimeMillis();
+		this.setTimeupdate(System.currentTimeMillis());
 	}
 
 	public String getId() {
@@ -29,21 +29,6 @@ public class KeyWord {
 		this.id = id;
 	}
 
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 
 	public List<String> getApps() {
 		return apps;
@@ -51,6 +36,22 @@ public class KeyWord {
 
 	public void setApps(List<String> apps) {
 		this.apps = apps;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public long getTimeupdate() {
+		return timeupdate;
+	}
+
+	public void setTimeupdate(long timeupdate) {
+		this.timeupdate = timeupdate;
 	}
 
 }
