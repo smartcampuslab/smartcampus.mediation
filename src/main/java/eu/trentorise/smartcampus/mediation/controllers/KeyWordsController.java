@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,69 +41,68 @@ public class KeyWordsController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/key/{app}/add")
 	public @ResponseBody
-	boolean addKey(HttpServletRequest request, @RequestParam("key") String key,@PathVariable String app) {
+	boolean addKey(HttpServletRequest request, @RequestParam("key") String key,
+			@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("key").is(key));
 		KeyWord toDelete = (KeyWord) db.findOne(query2, KeyWord.class);
-		
-		//base case not in db
+
+		// base case not in db
 		if (toDelete == null) {
-			KeyWord keyWord = new KeyWord(key,app);
+			KeyWord keyWord = new KeyWord(key, app);
 			db.save(keyWord);
 			return true;
-		}else{
-			//in db 
-			if(toDelete.getApps().contains(app)){
-				//in db and for this app
+		} else {
+			// in db
+			if (toDelete.getApps().contains(app)) {
+				// in db and for this app
 				return true;
-			}else{
-				//in db but not for this app
+			} else {
+				// in db but not for this app
 				toDelete.getApps().add(app);
 				return true;
 			}
 		}
-		
-		
+
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/{app}/all")
 	public @ResponseBody
-	List<KeyWord> getKey(HttpServletRequest request,@PathVariable String app) {
+	List<KeyWord> getKey(HttpServletRequest request, @PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("apps").in(app));
-		
 
 		return db.find(query2, KeyWord.class);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/all")
 	public @ResponseBody
 	List<KeyWord> getAllKey(HttpServletRequest request) {
 
 		Query query2 = new Query();
-		
 
 		return db.find(query2, KeyWord.class);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/key/{app}")
 	public @ResponseBody
-	boolean deleteKey(HttpServletRequest request,@RequestBody String key,@PathVariable String app) {
+	boolean deleteKey(HttpServletRequest request, @RequestBody String key,
+			@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("key").is(key));
-		
+
 		KeyWord toDelete = (KeyWord) db.findOne(query2, KeyWord.class);
-		
+
 		Query query3 = new Query();
 		query3.addCriteria(Criteria.where("key").is(key));
 		query3.addCriteria(Criteria.where("apps").in(app));
 
-		if(db.findOne(query3, KeyWord.class)!=null){
+		if (db.findOne(query3, KeyWord.class) != null) {
 			toDelete.getApps().remove(app);
-		}else{
+		} else {
 			toDelete.getApps().add(app);
 		}
 		toDelete.setTimestamp(System.currentTimeMillis());
@@ -112,35 +110,45 @@ public class KeyWordsController {
 		db.save(toDelete);
 		return true;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/{app}/{data}")
 	public @ResponseBody
-	List<KeyWord> getDeltaKey(HttpServletRequest request, @PathVariable String app, @PathVariable long data) {
+	List<KeyWord> getDeltaKey(HttpServletRequest request,
+			@PathVariable String app, @PathVariable long data) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("timestamp").gte(data));
 		query2.addCriteria(Criteria.where("apps").in(app));
 
-		//pass all the key or only the reference?
-		
+		// pass all the key or only the reference?
 
 		return db.find(query2, KeyWord.class);
 	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/{data}")
+
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/data/{data}")
 	public @ResponseBody
 	List<KeyWord> getDeltaKey(HttpServletRequest request,
 			@PathVariable long data) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("timestamp").gte(data));
-		
-		//pass all the key or only the reference?
-		
+
+		// pass all the key or only the reference?
 
 		return db.find(query2, KeyWord.class);
 	}
 	
-	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/key/app/{app}")
+	public @ResponseBody
+	List<KeyWord> getDAllKeyByApp(HttpServletRequest request,
+			@PathVariable String app) {
+
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("apps").in(app));
+
+		// pass all the key or only the reference?
+
+		return db.find(query2, KeyWord.class);
+	}
 
 }

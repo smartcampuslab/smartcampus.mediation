@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.mediation.model.KeyWord;
 import eu.trentorise.smartcampus.mediation.model.MessageToMediationService;
 
 @Controller
@@ -57,20 +58,21 @@ public class CommentController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parsenotapproved/{app}/all")
 	public @ResponseBody
-	List<MessageToMediationService> getCommentoPA(HttpServletRequest request,@PathVariable String app) {
+	List<MessageToMediationService> getCommentoPA(HttpServletRequest request,
+			@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("parseApproved").is(false));
 		query2.addCriteria(Criteria.where("webappname").is(app));
-		
 
 		return db.find(query2, MessageToMediationService.class);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/{app}/all")
 	public @ResponseBody
-	List<MessageToMediationService> getCommentoMA(HttpServletRequest request,@PathVariable String app) {
+	List<MessageToMediationService> getCommentoMA(HttpServletRequest request,
+			@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
@@ -87,8 +89,6 @@ public class CommentController {
 
 		Query queryFilterApp = new Query();
 		queryFilterApp.addCriteria(Criteria.where("app_name").is(sort_by));
-		MessageToMediationService mediationService = db.findOne(queryFilterApp,
-				MessageToMediationService.class);
 		queryFilterApp.sort().on(sort_by, Order.DESCENDING);
 
 		return db.find(queryFilterApp, MessageToMediationService.class);
@@ -111,7 +111,6 @@ public class CommentController {
 		return true;
 
 	}
-	
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/mediationapproved/change")
 	public @ResponseBody
@@ -125,6 +124,7 @@ public class CommentController {
 
 		mediationService.setMediationApproved(!mediationService
 				.isMediationApproved());
+		mediationService.setTimestamp(System.currentTimeMillis());
 
 		db.save(mediationService);
 
@@ -137,20 +137,19 @@ public class CommentController {
 		return true;
 
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/{app}/{data}")
+	public @ResponseBody
+	List<MessageToMediationService> exportComment(HttpServletRequest request,
+			@PathVariable String app, @PathVariable long data) {
 
-	private void setCommentApprovedTo(
-			MessageToMediationService messageToMediationService) {
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("timestamp").gte(data));
+		query2.addCriteria(Criteria.where("apps").in(app));
 
-		try {
-			// RemoteConnector.postJSON(
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// } catch (RemoteException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		// pass all the key or only the reference?
+
+		return db.find(query2, MessageToMediationService.class);
 	}
 
 }
