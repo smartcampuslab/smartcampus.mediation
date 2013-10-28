@@ -13,7 +13,7 @@
 	href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css"
 	rel="stylesheet">
 <link
-	href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css"
+	href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css"
 	rel="stylesheet">
 
 <!-- required libraries -->
@@ -52,12 +52,12 @@
 				<div ng-repeat="tab in tabs" data-title="{{tab}}"></div>
 			</div>
 
-			<div ng-show="tabs.active() == 'Da approvare'">
+			<div ng-show="tabs.active() == 'Da approvare'" >
 
 
 				<div ng-controller="filtro2Controller" class="container"
 					style="text-align: center; padding-top: 5%;">
-					<h1>Commenti approvati da controllo automatico</h1>
+					<h1>Commenti da approvare</h1>
 
 					<div class="row">
 						<div class="span12">
@@ -97,7 +97,7 @@
 								</tr>
 							</thead>
 							<tbody class="animate-repeat"
-								ng-repeat="comment in commentsParseApproved | filter:q  | startFrom:currentPage*pageSize | limitTo:pageSize">
+								ng-repeat="comment in remoteComment | filter:q  | startFrom:currentPageFiltro2*pageSize | limitTo:pageSize">
 								<tr>									
 									<td>{{comment.timestamp | dateformat}}</td>
 									<td>{{comment.entityId}}</td>
@@ -107,23 +107,23 @@
 
 
 									<td ng-switch on="comment.mediationApproved"><span
-										ng-switch-when="true">
+										ng-switch-when="WAITING">
 											<div class="btn-group ">
-												<a class="btn btn-success" href="#"><i
-													class="icon-comment-alt"></i> Approved</a> <a
-													class="btn btn-success dropdown-toggle"
+												<a class="btn btn-warning" href="#"><i
+													class="fa fa-exclamation-triangle"></i> Waiting valutation</a> <a
+													class="btn btn-warning dropdown-toggle"
 													data-toggle="dropdown" href="#"> <span
 													class="icon-caret-down"></span></a>
 												<ul class="dropdown-menu">
-													<li><a href="" ng-click="editNote(comment._id)"><i
-															class="icon-fixed-width icon-pencil"></i> Edit</a></li>
+													<li><a href="" ng-click="changeMediationApproved(comment._id,'APPROVED')"><i
+															class="fa fa-check"></i> Approve</a></li>
 													<li><a href=""
-														ng-click="changeMediationApproved(comment._id)"><i
-															class="icon-fixed-width icon-ban-circle"></i> Block</a></li>
+														ng-click="changeMediationApproved(comment._id,'NOT_APPROVED')"><i
+															class="fa fa-minus-circle"></i> Block</a></li>
 												</ul>
 											</div>
 
-									</span> <span name="theForm" ng-switch-when="false">
+									</span> <span name="theForm" ng-switch-when="NOT_APPROVED">
 											<div class="btn-group ">
 												<a class="btn btn-danger" href="#"><i
 													class="icon-ban-circle"></i> Blocked</a> <a
@@ -131,15 +131,34 @@
 													data-toggle="dropdown" href="#"> <span
 													class="icon-caret-down"></span></a>
 												<ul class="dropdown-menu">
-													<li><a href="" ng-click="editNote(comment._id)"><i
-															class="icon-fixed-width icon-pencil"></i> Edit</a></li>
+													<li><a href="" ng-click="changeMediationApproved(comment._id,'APPROVED')"><i
+															class="fa fa-check"></i> Approved</a></li>
 													<li><a href=""
-														ng-click="changeMediationApproved(comment._id)"><i
-															class="icon-fixed-width icon-comment-alt"></i> Approved</a></li>
+														ng-click="changeMediationApproved(comment._id,'WAITING')"><i
+															class="fa fa-clock-o"></i> Sospend</a></li>
 												</ul>
 											</div>
-									</span></td>
-									<td>{{comment.note}}</td>
+									</span>
+									<span name="theForm" ng-switch-when="APPROVED">
+											<div class="btn-group ">
+												<a class="btn btn-success" href="#"><i
+													class="fa fa-check"></i> Approved</a> <a
+													class="btn btn-success dropdown-toggle"
+													data-toggle="dropdown" href="#"> <span
+													class="icon-caret-down"></span></a>
+												<ul class="dropdown-menu">
+													<li><a href="" ng-click="changeMediationApproved(comment._id,'WAITING')"><i
+															class="fa fa-clock-o"></i> Sospend</a></li>
+													<li><a href=""
+														ng-click="changeMediationApproved(comment._id,'NOT_APPROVED')"><i
+															class="fa fa-minus-circle"></i> Block</a></li>
+												</ul>
+											</div>
+									</span>
+									</td>
+									<td>{{comment.note |nullString}}<a href=""
+														ng-click="editNote(comment._id)"><i
+															class="fa fa-minus-circle"></i> Edit</a></td>
 								</tr>
 
 
@@ -153,14 +172,14 @@
 							ng-click="currentPage=currentPage-1">Previous</button>
 						{{currentPageFiltro2+1}}/{{numberOfPagesFiltro2()}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPageFiltro2 >= commentsParseApproved.length/pageSize - 1"
+							ng-disabled="currentPageFiltro2 >= remoteComment.length/pageSize - 1"
 							ng-click="currentPageFiltro2=currentPageFiltro2+1">Next</button>
 					</div>
 				</div>
 
 			</div>
 
-			<div ng-show="tabs.active() == 'Approvati'">
+			<div ng-show="tabs.active() == 'Log del parser su app'">
 
 				<div ng-controller="filtro1Controller" class="container"
 					style="text-align: center; padding-top: 5%;">
@@ -204,27 +223,33 @@
 								</tr>
 							</thead>
 							<tbody class="animate-repeat"
-								ng-repeat="comment in commentsNotParseApproved | filter:q  | startFrom:currentPage*pageSize | limitTo:pageSize">
+								ng-repeat="comment in  localComment | filter:q  | startFrom:currentPageFiltro1*pageSize | limitTo:pageSize">
 								<tr>
-									
+								
 									<td>{{comment.timestamp | dateformat}}</td>
 									<td>{{comment.entityId}}</td>
 									<td>{{comment.userid}}</td>
 									<td>{{comment.entityTesto|truncate}}</td>
-									<td><span>
-											<div class="btn-group ">
-												<a class="btn btn-danger" href="#"><i
-													class="icon-ban-circle"></i> Blocked</a>
+																		
+									<td ng-switch on="comment.parseApproved"><span
+										ng-switch-when="false">
+											<div >
+												<a class="label label-danger" href="#"><i
+													class="fa fa-minus-circle"></i> Blocked</a>
 											</div>
 
+									</span> <span name="theForm" ng-switch-when="true">
+											<div >
+												<a class="label label-success" href="#"><i
+													class="fa fa-check"></i> Approved</a>
+											</div>
+									</span>
+									
+									</td>
 
 
 
-									</span></td>
-
-
-
-									<td>{{comment.note}}</td>
+									<td>{{comment.note |nullString}}</td>
 								</tr>
 
 
@@ -238,7 +263,7 @@
 							ng-click="currentPageFiltro1=currentPageFiltro1-1">Previous</button>
 						{{currentPageFiltro1+1}}/{{numberOfPagesFiltro1()}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPageFiltro1 >= commentsNotParseApproved.length/pageSize - 1"
+							ng-disabled="currentPageFiltro1 >=  localComment.length/pageSize - 1"
 							ng-click="currentPageFiltro1=currentPageFiltro1+1">Next</button>
 					</div>
 				</div>

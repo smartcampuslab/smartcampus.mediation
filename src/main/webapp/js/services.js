@@ -5,30 +5,29 @@ app.controller('MainCtrl',
 		function($scope, $http, $window, $location) {
 
 			// The tab directive will use this data
-			$scope.tabs = [ 'Parole chiavi', 'Da approvare', 'Approvati' ];
+			$scope.tabs = [ 'Parole chiavi', 'Da approvare', 'Log del parser su app' ];
 			$scope.tabs.index = 0;
 			$scope.tabs.active = function() {
 				return $scope.tabs[$scope.tabs.index];
 			}
-			$scope.commentsParseApproved = [];
+			$scope.remoteComment = [];
 			$scope.currentPageFiltro2 = 0;
 			$scope.pageSize = 8;
 			$scope.numberOfPagesFiltro2 = function() {
-				return Math.ceil($scope.commentsParseApproved.length
+				return Math.ceil($scope.remoteComment.length
 						/ $scope.pageSize);
 			}
-			$scope.commentsNotParseApproved = [];
-
+			$scope. localComment = [];
 			$scope.currentPageFiltro1 = 0;
 			$scope.pageSize = 8;
 			$scope.numberOfPagesFiltro1 = function() {
-				return Math.ceil($scope.commentsNotParseApproved.length
+				return Math.ceil($scope. localComment.length
 						/ $scope.pageSize);
 			}
 			$scope.keyList = [];
 			$scope.allkeyList = [];
 
-			$scope.app = 'studymate';
+			$scope.app = 'ifame';
 
 			$scope.options = {
 				mstep : [ 'ifame', 'studymate' ]
@@ -69,13 +68,13 @@ app.controller('MainCtrl',
 
 				$http({
 					method : 'GET',
-					url : 'rest/comment/parseapproved/' + $scope.app + '/all',
+					url : 'rest/comment/remote/' + $scope.app + '/all',
 					params : {},
 					headers : {
 						Authorization : 'Bearer ' + $scope.token
 					}
 				}).success(function(data) {
-					$scope.commentsParseApproved = data;
+					$scope.remoteComment = data;
 					// $scope.info = 'Find latest comments inserted';
 					// $scope.error = '';
 				}).error(function(data) {
@@ -85,13 +84,13 @@ app.controller('MainCtrl',
 
 				$http({
 					method : 'GET',
-					url : 'rest/comment/parsenotapproved/' + $scope.app + '/all',
+					url : 'rest/comment/local/' + $scope.app + '/all',
 					params : {},
 					headers : {
 						Authorization : 'Bearer ' + $scope.token
 					}
 				}).success(function(data) {
-					$scope.commentsNotParseApproved = data;
+					$scope. localComment = data;
 					// $scope.info = 'Find latest comments inserted';
 					// $scope.error = '';
 				}).error(function(data) {
@@ -119,7 +118,7 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 					Authorization : 'Bearer ' + $scope.token
 				}
 			}).success(function(data) {
-				init();
+				$scope.init();
 				// $scope.info = 'Find latest comments inserted';
 				// $scope.error = '';
 			}).error(function(data) {
@@ -129,36 +128,18 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 		}
 	};
 
-	$scope.changeParseApproved = function(_id) {
-		var n = prompt("Attention ");
+	
+	$scope.changeMediationApproved = function(_id,stato) {
+		//var n = prompt("Attention ");
 
 		$http({
 			method : 'PUT',
-			url : 'rest/comment/' + _id + '/parseapproved/change',
+			url : 'rest/comment/' + _id + '/mediationapproved/change/'+stato,
 			headers : {
 				Authorization : 'Bearer ' + $scope.token
 			}
 		}).success(function(data) {
-			init();
-			// $scope.info = 'Find latest comments inserted';
-			// $scope.error = '';
-		}).error(function(data) {
-			// $scope.info = '';
-			// $scope.error = "No comments found";
-		});
-
-	};
-	$scope.changeMediationApproved = function(_id) {
-		var n = prompt("Attention ");
-
-		$http({
-			method : 'PUT',
-			url : 'rest/comment/' + _id + '/mediationapproved/change',
-			headers : {
-				Authorization : 'Bearer ' + $scope.token
-			}
-		}).success(function(data) {
-			init();
+			$scope.init();
 			// $scope.info = 'Find latest comments inserted';
 			// $scope.error = '';
 		}).error(function(data) {
@@ -352,5 +333,12 @@ angular.module('filters', []).filter('truncate', function() {
 	return function(input, start) {
 		start = +start; // parse to int
 		return input.slice(start);
+	}
+}).filter('nullString', function() {
+	return function(input) {		
+		if(input=="null")
+			return "";
+		else
+			return input;
 	}
 });

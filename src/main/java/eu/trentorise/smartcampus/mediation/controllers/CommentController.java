@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.mediation.model.KeyWord;
 import eu.trentorise.smartcampus.mediation.model.MessageToMediationService;
+import eu.trentorise.smartcampus.mediation.model.Stato;
 
 @Controller
 public class CommentController {
@@ -56,27 +57,27 @@ public class CommentController {
 		return db.findOne(query2, MessageToMediationService.class) != null;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parsenotapproved/{app}/all")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/local/{app}/all")
 	public @ResponseBody
 	List<MessageToMediationService> getCommentoPA(HttpServletRequest request,
 			@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
-		query2.addCriteria(Criteria.where("parseApproved").is(false));
+		query2.addCriteria(Criteria.where("mediationApproved").is(Stato.NOT_REQUEST));
 		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, MessageToMediationService.class);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/{app}/all")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/remote/{app}/all")
 	public @ResponseBody
 	List<MessageToMediationService> getCommentoMA(HttpServletRequest request,
 			@PathVariable String app) {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
-		query2.addCriteria(Criteria.where("parseApproved").is(true));
+		query2.addCriteria(Criteria.where("mediationApproved").ne(Stato.NOT_REQUEST));
 		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, MessageToMediationService.class);
@@ -112,27 +113,22 @@ public class CommentController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/mediationapproved/change")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/mediationapproved/change/{stato}")
 	public @ResponseBody
 	boolean changeMediationApproved(HttpServletRequest request,
-			@PathVariable String _id) {
+			@PathVariable String _id,@PathVariable String stato) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(_id));
 		MessageToMediationService mediationService = db.findOne(query2,
 				MessageToMediationService.class);
 
-		mediationService.setMediationApproved(!mediationService
-				.isMediationApproved());
+		mediationService.setMediationApproved(Stato.valueOf(stato));
 		mediationService.setTimestamp(System.currentTimeMillis());
 
 		db.save(mediationService);
 
-		// controllo se il commento è stato approvato nei 2 livelli
-		if (mediationService.isParseApproved()
-				&& mediationService.isMediationApproved()) {
-
-		}
+		
 
 		return true;
 
