@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package eu.trentorise.smartcampus.mediation.controllers;
+package eu.trentorise.smartcampus.moderator.controllers;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.mediation.model.KeyWord;
+import eu.trentorise.smartcampus.moderator.model.KeyWord;
 
 @Controller
 public class KeyWordsController {

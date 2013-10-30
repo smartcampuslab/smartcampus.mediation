@@ -32,6 +32,8 @@ app.controller('MainCtrl',
 			$scope.options = {
 				mstep : [ 'ifame', 'studymate' ]
 			};
+			
+			$scope.token="blabla";
 
 			$scope.init = function() {
 
@@ -105,8 +107,8 @@ app.controller('MainCtrl',
 
 function filtro2Controller($scope, $http, $location, $cookieStore) {
 
-	$scope.editNote = function(_id) {
-		var n = prompt("Add note to this comment ", "..." + _id);
+	$scope.editNote = function(_id,note) {
+		var n = prompt("Add note to this comment ", ""+note);
 		if (n != null && n.trim().length > 0) {
 			$http({
 				method : 'POST',

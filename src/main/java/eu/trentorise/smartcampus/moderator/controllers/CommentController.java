@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package eu.trentorise.smartcampus.mediation.controllers;
+package eu.trentorise.smartcampus.moderator.controllers;
 
 import java.util.List;
 
@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.mediation.model.KeyWord;
-import eu.trentorise.smartcampus.mediation.model.MessageToMediationService;
-import eu.trentorise.smartcampus.mediation.model.Stato;
+import eu.trentorise.smartcampus.moderator.model.KeyWord;
+import eu.trentorise.smartcampus.moderator.model.MessageToMediationService;
+import eu.trentorise.smartcampus.moderator.model.Stato;
 
 @Controller
 public class CommentController {
@@ -83,17 +83,7 @@ public class CommentController {
 		return db.find(query2, MessageToMediationService.class);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/parseapproved/application/{sort_by}")
-	public @ResponseBody
-	List<MessageToMediationService> getCommentoFileredByApp(
-			HttpServletRequest request, @PathVariable String sort_by) {
-
-		Query queryFilterApp = new Query();
-		queryFilterApp.addCriteria(Criteria.where("app_name").is(sort_by));
-		queryFilterApp.sort().on(sort_by, Order.DESCENDING);
-
-		return db.find(queryFilterApp, MessageToMediationService.class);
-	}
+	
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/note/add")
 	public @ResponseBody
@@ -134,7 +124,7 @@ public class CommentController {
 
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/{app}/{data}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/data/{data}/{app}")
 	public @ResponseBody
 	List<MessageToMediationService> exportComment(HttpServletRequest request,
 			@PathVariable String app, @PathVariable long data) {

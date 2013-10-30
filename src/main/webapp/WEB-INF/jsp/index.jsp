@@ -156,9 +156,9 @@
 											</div>
 									</span>
 									</td>
-									<td>{{comment.note |nullString}}<a href=""
-														ng-click="editNote(comment._id)"><i
-															class="fa fa-minus-circle"></i> Edit</a></td>
+									<td>{{comment.note | nullString}} </td><td><a href=""
+														ng-click="editNote(comment._id,comment.note)"><i
+															class="fa fa-pencil"></i> Edit</a></td>
 								</tr>
 
 
@@ -183,7 +183,7 @@
 
 				<div ng-controller="filtro1Controller" class="container"
 					style="text-align: center; padding-top: 5%;">
-					<h1>Commenti da controllo automatico gia' bloccati</h1>
+					<h1>Commenti da controllo automatico </h1>
 
 					<div class="row">
 						<div class="span12">

@@ -1,4 +1,4 @@
-package eu.trentorise.smartcampus.mediation.model;
+package eu.trentorise.smartcampus.moderator.model;
 
 import java.io.Serializable;
 

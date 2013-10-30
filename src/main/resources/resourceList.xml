@@ -1,0 +1,62 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- Copyright 2012-2013 Trento RISE Licensed under the Apache License, Version 
+	2.0 (the "License"); you may not use this file except in compliance with 
+	the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<service xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../../../../jaxb/binding/resourceTemplateSchema.xsd"
+	name="Moderator service" id="smartcampus.moderator">
+
+
+
+	<description>Service manage moderation</description>
+	<resource name="App" id="app" />
+	<resource name="Data" id="data" />
+	<resource name="Data" id="data" />
+	<resource name="Stato" id="stato" />
+	<resource name="Id" id="_id" />
+
+
+	
+	<resourceMapping method="GET"
+		pathPattern="/rest/key/app/{app}"
+		uri="moderator.key.{app}" />
+	
+	<resourceMapping method="POST"
+		pathPattern="/rest/comment/add"
+		uri="moderator.comment" />
+	
+	<resourceMapping method="GET"
+		pathPattern="/rest/comment/local/{app}/all"
+		uri="moderator.comment.local.{app}" />
+	
+	<resourceMapping method="GET"
+		pathPattern="/rest/comment/remote/{app}/all"
+		uri="moderator.comment.remote.{app}" />
+	
+	<resourceMapping method="POST"
+		pathPattern="/rest/comment/{_id}/note/add"
+		uri="moderator.comment.note.{app}" />
+	
+	<resourceMapping method="PUT"
+		pathPattern="/rest/comment/{_id}/mediationapproved/change/{stato}"
+		uri="moderator.comment.stato" />
+	
+	<resourceMapping method="GET"
+		pathPattern="/rest/comment/data/{data}/{app}"
+		uri="moderator.comment.{app}" />
+	
+	
+	
+	
+	
+	
+	
+
+
+</service>
+
+

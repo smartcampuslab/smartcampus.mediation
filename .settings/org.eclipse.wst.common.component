@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="resource.api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/resource.api/resource.api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="aac.client-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/aac.client/aac.client">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -13,10 +16,7 @@
         <dependent-module archiveName="territoryservice.client-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/territoryservice.client/territoryservice.client">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="communicator.client-2.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/communicator.client/communicator.client">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="java-output-path" value="/smartcampus.mediation/target/classes"/>
-        <property name="context-root" value="mediation"/>
+        <property name="context-root" value="core.moderator"/>
     </wb-module>
 </project-modules>

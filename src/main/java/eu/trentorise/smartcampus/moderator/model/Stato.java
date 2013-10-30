@@ -1,4 +1,4 @@
-package eu.trentorise.smartcampus.mediation.model;
+package eu.trentorise.smartcampus.moderator.model;
 
 public enum Stato{
 	APPROVED,NOT_APPROVED,WAITING,NOT_REQUEST
