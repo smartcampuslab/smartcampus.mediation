@@ -24,7 +24,7 @@ public class PortalController {
 		return "index";
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/login")
+	@RequestMapping(method = RequestMethod.GET, value = "/web/login")
 	public String login(HttpServletRequest request) {
 
 		return "index";
