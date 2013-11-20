@@ -11,14 +11,7 @@ public class MessageToMediationService implements Serializable {
 	private String _id;
 	private boolean parseApproved;
 	private Stato mediationApproved;
-	public Stato getMediationApproved() {
-		return mediationApproved;
-	}
-
-	public void setMediationApproved(Stato mediationApproved) {
-		this.mediationApproved = mediationApproved;
-	}
-
+	
 	private long timestamp;
 	private String webappname;
 	private int entityId;
@@ -41,6 +34,15 @@ public class MessageToMediationService implements Serializable {
 		this.setEntityTesto(entityTesto);
 		this.setUserid(userid);
 	}
+	
+	public Stato getMediationApproved() {
+		return mediationApproved;
+	}
+
+	public void setMediationApproved(Stato mediationApproved) {
+		this.mediationApproved = mediationApproved;
+	}
+
 
 	public boolean isParseApproved() {
 		return parseApproved;
