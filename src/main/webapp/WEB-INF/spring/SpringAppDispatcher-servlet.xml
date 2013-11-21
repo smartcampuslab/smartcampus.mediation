@@ -18,7 +18,7 @@
 	<mvc:annotation-driven/>
 
 	<!-- Scan controllers in this package -->
-	<context:component-scan base-package="eu.trentorise.smartcampus.mediation.controllers"/>
+	<context:component-scan base-package="eu.trentorise.smartcampus.moderator.controllers"/>
 	
 	<context:property-placeholder location="classpath:mediation.properties" />
 	
@@ -53,4 +53,6 @@
 		 <constructor-arg name="mongoDbFactory" ref="factory" />
 	</bean>
 		
+	
+	
 </beans>
