@@ -36,10 +36,10 @@
   <context:property-placeholder location="classpath:mediation.properties" />
   
   
-<http xmlns="http://www.springframework.org/schema/security" pattern="/css/**" security="none"/>
-  <http xmlns="http://www.springframework.org/schema/security" pattern="/img/**" security="none"/>
-  <http xmlns="http://www.springframework.org/schema/security" pattern="/js/**" security="none"/>
-  <http xmlns="http://www.springframework.org/schema/security" pattern="/lib/**" security="none"/>
+<http xmlns="http://www.springframework.org/schema/security" pattern="/web/css/**" security="none"/>
+  <http xmlns="http://www.springframework.org/schema/security" pattern="/web/img/**" security="none"/>
+  <http xmlns="http://www.springframework.org/schema/security" pattern="/web/js/**" security="none"/>
+  <http xmlns="http://www.springframework.org/schema/security" pattern="/web/lib/**" security="none"/>
 <!--   <http xmlns="http://www.springframework.org/schema/security" pattern="/web/**" security="none"/> -->
 	
 <!-- 	<http create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"

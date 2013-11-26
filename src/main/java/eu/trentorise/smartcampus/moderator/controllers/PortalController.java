@@ -53,6 +53,9 @@ public class PortalController extends SCController{
 	@Autowired
 	@Value("${smartcampus.client.secret}")
 	private String client_secret;
+	
+	@Autowired
+	private AuthServices services;
 
 ////
 ////	@RequestMapping(method = RequestMethod.GET, value = "/")
@@ -79,7 +82,16 @@ public class PortalController extends SCController{
 //		return "exit";
 //	}
 //	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public ModelAndView web(HttpServletRequest request) {
+		
+		return new ModelAndView("redirect:/web");
+	}
+	
+
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/web")
 	public ModelAndView index(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", getToken(request));
@@ -107,13 +119,14 @@ public class PortalController extends SCController{
 		return new ModelAndView(
 				"redirect:"
 						+ aacService.generateAuthorizationURIForCodeFlow(redirectUri, null,
-								"smartcampus.profile.basicprofile.me,smartcampus.profile.accountprofile.me", null));
+								"smartcampus.profile.basicprofile.me,smartcampus.profile.accountprofile.me,moderator.comment.stato,moderator.key,moderator.comment,moderator.key.ifame,moderator.comment.stato,moderator.key,smartcampus.profile.basicprofile.me,moderator.comment,moderator.comment.remote.ifame,smartcampus.profile.accountprofile.me,moderator.comment.note.ifame,moderator.comment.local.ifame,moderator.comment.ifame", null));
 	}
+
+	
 
 	@Override
 	protected AuthServices getAuthServices() {
-		// TODO Auto-generated method stub
-		return null;
+		return services;
 	}
 	
 	protected String getToken(HttpServletRequest request) {
