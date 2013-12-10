@@ -23,43 +23,43 @@
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/key/app/{app}"
-		uri="moderator.key.{app}" />
+		uri="moderator.keyword.{app}" />
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/key/{app}/all"
-		uri="moderator.key.{app}" />
+		uri="moderator.keyword.{app}" />
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/key/all"
-		uri="moderator.key" />
+		uri="moderator.keyword.system" />
 	
 	<resourceMapping method="POST"
 		pathPattern="/rest/key/{app}/add"
-		uri="moderator.key.{app}" />	
-	
-	<resourceMapping method="POST"
-		pathPattern="/rest/comment/add"
-		uri="moderator.comment" />
+		uri="moderator.keyword.{app}" />	
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/comment/local/{app}/all"
-		uri="moderator.comment.local.{app}" />
+		uri="moderator.content.keyword.{app}" />
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/comment/remote/{app}/all"
-		uri="moderator.comment.remote.{app}" />
+		uri="moderator.content.manual.{app}" />
 	
 	<resourceMapping method="POST"
-		pathPattern="/rest/comment/{_id}/note/add"
-		uri="moderator.comment.note.{app}" />
+		pathPattern="/rest/comment/{_id}/app/{app}/note/add"
+		uri="moderator.content.manual.{app}" />
 	
 	<resourceMapping method="PUT"
-		pathPattern="/rest/comment/{_id}/mediationapproved/change/{stato}"
-		uri="moderator.comment.stato" />
+		pathPattern="/rest/comment/{_id}/app/{app}/mediationapproved/change/{stato}"
+		uri="moderator.content.manual.{app}" />
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/comment/data/{data}/{app}"
-		uri="moderator.comment.{app}" />
+		uri="moderator.content.manual.{app}" />
+		
+	<resourceMapping method="POST"
+		pathPattern="/rest/comment/app/{app}/add"
+		uri="moderator.content.manual.{app}" />
 	
 
 

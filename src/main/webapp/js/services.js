@@ -115,7 +115,7 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 		if (n != null && n.trim().length > 0) {
 			$http({
 				method : 'POST',
-				url : 'rest/comment/' + _id + '/note/add',
+				url : 'rest/comment/' + _id + '/app/' + $scope.app + '/note/add',
 				params : {
 					"note" : n
 				},
@@ -139,7 +139,7 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 
 		$http({
 			method : 'PUT',
-			url : 'rest/comment/' + _id + '/mediationapproved/change/'+stato,
+			url : 'rest/comment/' + _id +  '/app/' + $scope.app + '/mediationapproved/change/'+stato,
 			headers : {
 				Authorization : 'Bearer ' + token
 			}
@@ -227,7 +227,7 @@ function filtro1Controller($scope, $http, $location, $cookieStore) {
 
 		$http({
 			method : 'PUT',
-			url : 'rest/comment/' + _id + '/mediationapproved/change',
+			url : 'rest/comment/' + _id + '/app/' + $scope.app + '/mediationapproved/change',
 			headers : {
 				Authorization : 'Bearer ' + token
 			}

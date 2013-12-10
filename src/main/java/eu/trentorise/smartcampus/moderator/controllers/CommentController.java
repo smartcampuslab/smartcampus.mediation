@@ -42,10 +42,10 @@ public class CommentController {
 	@Autowired
 	MongoTemplate db;
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/add")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/app/{app}/add")
 	public @ResponseBody
 	boolean addCommento(HttpServletRequest request,
-			@RequestBody String messageToMediationService) {
+			@RequestBody String messageToMediationService,@PathVariable String app) {
 		MessageToMediationService mediationService = MessageToMediationService
 				.valueOf(messageToMediationService);
 
@@ -85,9 +85,9 @@ public class CommentController {
 
 	
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/note/add")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/app/{app}/note/add")
 	public @ResponseBody
-	boolean addNote(HttpServletRequest request, @PathVariable String _id,
+	boolean addNote(HttpServletRequest request, @PathVariable String _id,@PathVariable String app,
 			@RequestParam String note) {
 
 		Query query2 = new Query();
@@ -103,10 +103,11 @@ public class CommentController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/mediationapproved/change/{stato}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/app/{app}/mediationapproved/change/{stato}")
 	public @ResponseBody
 	boolean changeMediationApproved(HttpServletRequest request,
-			@PathVariable String _id,@PathVariable String stato) {
+			
+			@PathVariable String app,@PathVariable String _id,@PathVariable String stato) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(_id));
