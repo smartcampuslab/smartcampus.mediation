@@ -317,8 +317,8 @@ angular.module('filters', []).filter('truncate', function() {
 		if (isNaN(length))
 			length = 60;
 
-		if (end === undefined)
-			end = "...";
+//		if (end === undefined)
+//			end = "...";
 
 //		if (text.length <= length || text.length - end.length <= length) {
 //			return text;

@@ -169,7 +169,7 @@
 
 						<button class="btn btn-primary"
 							ng-disabled="currentPageFiltro2 == 0"
-							ng-click="currentPage=currentPage-1">Previous</button>
+							ng-click="currentPageFiltro2=currentPageFiltro2-1">Previous</button>
 						{{currentPageFiltro2+1}}/{{numberOfPagesFiltro2()}}
 						<button class="btn btn-primary"
 							ng-disabled="currentPageFiltro2 >= remoteComment.length/pageSize - 1"
