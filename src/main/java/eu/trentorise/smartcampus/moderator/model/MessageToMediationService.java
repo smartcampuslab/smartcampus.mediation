@@ -6,11 +6,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MessageToMediationService implements Serializable {
-	
-	
+
 	private String _id;
 	private boolean parseApproved;
 	private Stato mediationApproved;
+
 	public Stato getMediationApproved() {
 		return mediationApproved;
 	}
@@ -57,8 +57,6 @@ public class MessageToMediationService implements Serializable {
 	public void setWebappname(String webappname) {
 		this.webappname = webappname;
 	}
-
-	
 
 	public long getTimestamp() {
 		return timestamp;

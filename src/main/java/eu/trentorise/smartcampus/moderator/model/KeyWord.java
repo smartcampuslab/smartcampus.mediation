@@ -29,7 +29,6 @@ public class KeyWord {
 		this.id = id;
 	}
 
-
 	public List<String> getApps() {
 		return apps;
 	}

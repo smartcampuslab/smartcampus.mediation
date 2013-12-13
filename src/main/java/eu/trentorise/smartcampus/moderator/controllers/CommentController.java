@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.moderator.model.KeyWord;
 import eu.trentorise.smartcampus.moderator.model.MessageToMediationService;
 import eu.trentorise.smartcampus.moderator.model.Stato;
 
@@ -45,7 +44,8 @@ public class CommentController {
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/app/{app}/add")
 	public @ResponseBody
 	boolean addCommento(HttpServletRequest request,
-			@RequestBody String messageToMediationService,@PathVariable String app) {
+			@RequestBody String messageToMediationService,
+			@PathVariable String app) {
 		MessageToMediationService mediationService = MessageToMediationService
 				.valueOf(messageToMediationService);
 
@@ -64,7 +64,8 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
-		query2.addCriteria(Criteria.where("mediationApproved").is(Stato.NOT_REQUEST));
+		query2.addCriteria(Criteria.where("mediationApproved").is(
+				Stato.NOT_REQUEST));
 		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, MessageToMediationService.class);
@@ -77,18 +78,17 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.sort().on("timestamp", Order.DESCENDING);
-		query2.addCriteria(Criteria.where("mediationApproved").ne(Stato.NOT_REQUEST));
+		query2.addCriteria(Criteria.where("mediationApproved").ne(
+				Stato.NOT_REQUEST));
 		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, MessageToMediationService.class);
 	}
 
-	
-
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/app/{app}/note/add")
 	public @ResponseBody
-	boolean addNote(HttpServletRequest request, @PathVariable String _id,@PathVariable String app,
-			@RequestParam String note) {
+	boolean addNote(HttpServletRequest request, @PathVariable String _id,
+			@PathVariable String app, @RequestParam String note) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(_id));
@@ -106,8 +106,9 @@ public class CommentController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/app/{app}/mediationapproved/change/{stato}")
 	public @ResponseBody
 	boolean changeMediationApproved(HttpServletRequest request,
-			
-			@PathVariable String app,@PathVariable String _id,@PathVariable String stato) {
+
+	@PathVariable String app, @PathVariable String _id,
+			@PathVariable String stato) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(_id));
@@ -119,12 +120,10 @@ public class CommentController {
 
 		db.save(mediationService);
 
-		
-
 		return true;
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/data/{data}/{app}")
 	public @ResponseBody
 	List<MessageToMediationService> exportComment(HttpServletRequest request,
@@ -139,4 +138,42 @@ public class CommentController {
 		return db.find(query2, MessageToMediationService.class);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/content/id/{identity}/{app}")
+	public @ResponseBody
+	List<MessageToMediationService> getContentById(HttpServletRequest request,
+			@PathVariable String app, @PathVariable String identity) {
+
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("entityId").is(identity));
+		query2.addCriteria(Criteria.where("apps").in(app));
+
+		return db.find(query2, MessageToMediationService.class);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/content/from/{fromdata}/to/{todata}/{app}")
+	public @ResponseBody
+	List<MessageToMediationService> getContentById(HttpServletRequest request,
+			@PathVariable String app, @PathVariable long fromdata,
+			@PathVariable long todata) {
+
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("timestamp").gte(fromdata));
+		query2.addCriteria(Criteria.where("timestamp").lte(todata));
+		query2.addCriteria(Criteria.where("apps").in(app));
+
+		return db.find(query2, MessageToMediationService.class);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/content/id/{identity}/{app}")
+	public @ResponseBody
+	void deleteContentById(HttpServletRequest request,
+			@PathVariable String app, @PathVariable String identity) {
+
+		Query query2 = new Query();
+		query2.addCriteria(Criteria.where("entityId").is(identity));
+		query2.addCriteria(Criteria.where("apps").in(app));
+
+		db.remove(query2, MessageToMediationService.class);
+
+	}
 }
