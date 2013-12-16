@@ -49,6 +49,8 @@ public class CommentController {
 		MessageToMediationService mediationService = MessageToMediationService
 				.valueOf(messageToMediationService);
 
+		System.out.println(messageToMediationService);
+		
 		db.save(mediationService);
 
 		Query query2 = new Query();
@@ -66,7 +68,7 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("mediationApproved").is(
 				Stato.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		return db.find(query2, MessageToMediationService.class);
 	}
@@ -80,7 +82,7 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("mediationApproved").ne(
 				Stato.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		return db.find(query2, MessageToMediationService.class);
 	}
@@ -131,7 +133,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("timestamp").gte(data));
-		query2.addCriteria(Criteria.where("apps").in(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		// pass all the key or only the reference?
 
@@ -145,7 +147,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("entityId").is(identity));
-		query2.addCriteria(Criteria.where("apps").in(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		return db.find(query2, MessageToMediationService.class);
 	}
@@ -156,10 +158,8 @@ public class CommentController {
 			@PathVariable String app, @PathVariable long fromdata,
 			@PathVariable long todata) {
 
-		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("timestamp").gte(fromdata));
-		query2.addCriteria(Criteria.where("timestamp").lte(todata));
-		query2.addCriteria(Criteria.where("apps").in(app));
+		Query query2 = new Query( new Criteria().andOperator( Criteria.where("timestamp").gte(fromdata), Criteria.where("timestamp").lte(todata) ));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		return db.find(query2, MessageToMediationService.class);
 	}
@@ -171,7 +171,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("entityId").is(identity));
-		query2.addCriteria(Criteria.where("apps").in(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		db.remove(query2, MessageToMediationService.class);
 
