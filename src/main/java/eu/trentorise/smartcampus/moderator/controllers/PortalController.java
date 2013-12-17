@@ -38,9 +38,7 @@ public class PortalController extends SCController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	@Autowired
-	@Value("${smartcampus.mediator.url}")
-	private String mainURL;
+	
 
 	@Autowired
 	@Value("${aacURL}")
@@ -101,7 +99,7 @@ public class PortalController extends SCController {
 	public ModelAndView securePage(HttpServletRequest request,
 			@RequestParam(required = false) String code)
 			throws SecurityException, AACException {
-		String redirectUri = mainURL + "/check";
+		String redirectUri = getFullRequestPath(request) + "/check";		
 		String userToken = aacService.exchngeCodeForToken(code, redirectUri)
 				.getAccess_token();
 		List<GrantedAuthority> list = Collections
@@ -119,9 +117,11 @@ public class PortalController extends SCController {
 		return new ModelAndView("redirect:/");
 	}
 
+	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
 	public ModelAndView secure(HttpServletRequest request) {
-		String redirectUri = mainURL + "/check";
+		String redirectUri = getFullRequestPath(request) + "/check";
 		return new ModelAndView(
 				"redirect:"
 						+ aacService
@@ -161,6 +161,10 @@ public class PortalController extends SCController {
 		BasicProfile x=profileService.getBasicProfile(getToken(request));
 		List<String> lstApps=services.loadAppByUserId(x.getUserId());		
 		return JsonUtils.toJSON(lstApps);
+	}
+	
+	private String getFullRequestPath(HttpServletRequest request) {
+		return request.getScheme() + "://" +  request.getServerName() +  ":" + request.getServerPort() + request.getContextPath();
 	}
 
 }
