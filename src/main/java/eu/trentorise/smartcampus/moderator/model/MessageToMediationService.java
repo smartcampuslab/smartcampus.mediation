@@ -82,41 +82,19 @@ public class MessageToMediationService implements Serializable {
 		this.entityTesto = entityTesto;
 	}
 
-	public String ToJson() {
-		String object = new String();
-		object = "{\"parseApproved\":" + parseApproved
-				+ ",\"mediationApproved\":" + mediationApproved
-				+ ",\"timestamp\":" + timestamp + ",\"webappname\":\""
-				+ webappname + "\",\"entityId\":" + entityId
-				+ ",\"entityTesto\":\"" + entityTesto + "\",\"note\":\"" + note
-				+ "\",\"userid\":\"" + userid + "\"}";
+//	public String ToJson() {
+//		String object = new String();
+//		object = "{\"parseApproved\":" + parseApproved
+//				+ ",\"mediationApproved\":" + mediationApproved
+//				+ ",\"timestamp\":" + timestamp + ",\"webappname\":\""
+//				+ webappname + "\",\"entityId\":" + entityId
+//				+ ",\"entityTesto\":\"" + entityTesto + "\",\"note\":\"" + note
+//				+ "\",\"userid\":\"" + userid + "\"}";
+//
+//		return object;
+//	}
 
-		return object;
-	}
-
-	public static MessageToMediationService valueOf(String json) {
-		try {
-			JSONObject o = new JSONObject(json);
-			String webapp = o.getString("webappname");
-			String entityTesto = o.getString("entityTesto");
-			String userid = o.getString("userid");
-			int entityId = o.getInt("entityId");
-
-			MessageToMediationService messageToMediationService = new MessageToMediationService(
-					webapp, entityId, entityTesto, userid);
-			messageToMediationService.setMediationApproved(Stato.valueOf(o
-					.getString("mediationApproved")));
-			messageToMediationService.setParseApproved(o
-					.getBoolean("parseApproved"));
-			messageToMediationService.setTimestamp(o.getLong("timestamp"));
-			if (o.has("note"))
-				messageToMediationService.setNote(o.getString("note"));
-
-			return messageToMediationService;
-		} catch (JSONException e) {
-			return null;
-		}
-	}
+	
 
 	public String getNote() {
 		return note;

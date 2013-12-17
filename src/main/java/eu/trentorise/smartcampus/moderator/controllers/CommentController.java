@@ -19,6 +19,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -46,17 +48,40 @@ public class CommentController {
 	boolean addCommento(HttpServletRequest request,
 			@RequestBody String messageToMediationService,
 			@PathVariable String app) {
-		MessageToMediationService mediationService = MessageToMediationService
-				.valueOf(messageToMediationService);
+		MessageToMediationService mediationService = valueOf(messageToMediationService);
 
-		System.out.println(messageToMediationService);
-		
+	
 		db.save(mediationService);
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("entityId").is(
 				mediationService.getEntityId()));
 		return db.findOne(query2, MessageToMediationService.class) != null;
+	}
+	
+	
+	private MessageToMediationService valueOf(String json) {
+		try {
+			JSONObject o = new JSONObject(json);
+			String webapp = o.getString("webappname");
+			String entityTesto = o.getString("entityTesto");
+			String userid = o.getString("userid");
+			int entityId = o.getInt("entityId");
+
+			MessageToMediationService messageToMediationService = new MessageToMediationService(
+					webapp, entityId, entityTesto, userid);
+			messageToMediationService.setMediationApproved(Stato.valueOf(o
+					.getString("mediationApproved")));
+			messageToMediationService.setParseApproved(o
+					.getBoolean("parseApproved"));
+			messageToMediationService.setTimestamp(o.getLong("timestamp"));
+			if (o.has("note"))
+				messageToMediationService.setNote(o.getString("note"));
+
+			return messageToMediationService;
+		} catch (JSONException e) {
+			return null;
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/local/{app}/all")
@@ -90,7 +115,7 @@ public class CommentController {
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/app/{app}/note/add")
 	public @ResponseBody
 	boolean addNote(HttpServletRequest request, @PathVariable String _id,
-			@PathVariable String app, @RequestParam String note) {
+			@PathVariable String app, @RequestBody String note) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(_id));
@@ -107,9 +132,7 @@ public class CommentController {
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/app/{app}/mediationapproved/change/{stato}")
 	public @ResponseBody
-	boolean changeMediationApproved(HttpServletRequest request,
-
-	@PathVariable String app, @PathVariable String _id,
+	boolean changeMediationApproved(HttpServletRequest request,@PathVariable String app, @PathVariable String _id,
 			@PathVariable String stato) {
 
 		Query query2 = new Query();
@@ -146,8 +169,9 @@ public class CommentController {
 			@PathVariable String app, @PathVariable String identity) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("entityId").is(identity));
+		query2.addCriteria(Criteria.where("entityId").is(Integer.valueOf(identity)));
 		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.limit(1);
 
 		return db.find(query2, MessageToMediationService.class);
 	}
