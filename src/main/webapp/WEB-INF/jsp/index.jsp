@@ -106,13 +106,13 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 								ng-repeat="comment in remoteComment | filter:q  | startFrom:currentPageFiltro2*pageSize | limitTo:pageSize">
 								<tr>									
 									<td>{{comment.timestamp | dateformat}}</td>
-									<td>{{comment.entityId}}</td>
+									<td>{{comment.objectId}}</td>
 									<td>{{comment.userid}}</td>
-									<td>{{comment.entityTesto|truncate}}</td>
+									<td>{{comment.objectText|truncate}}</td>
 
 
 
-									<td ng-switch on="comment.mediationApproved"><span
+									<td ng-switch on="comment.manualApproved"><span
 										ng-switch-when="WAITING">
 											<div class="btn-group ">
 												<a class="btn btn-warning" href="#"><i
@@ -233,11 +233,11 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 								<tr>
 								
 									<td>{{comment.timestamp | dateformat}}</td>
-									<td>{{comment.entityId}}</td>
+									<td>{{comment.objectId}}</td>
 									<td>{{comment.userid}}</td>
-									<td>{{comment.entityTesto|truncate}}</td>
+									<td>{{comment.objectText|truncate}}</td>
 																		
-									<td ng-switch on="comment.parseApproved"><span
+									<td ng-switch on="comment.keywordApproved"><span
 										ng-switch-when="false">
 											<div >
 												<a class="label label-danger" href="#"><i
