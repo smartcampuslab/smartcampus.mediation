@@ -25,7 +25,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
+import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
+import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
+import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 import eu.trentorise.smartcampus.resourceprovider.controller.SCController;
 import eu.trentorise.smartcampus.resourceprovider.model.AuthServices;
 
@@ -87,9 +90,10 @@ public class PortalController extends SCController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/web")
-	public ModelAndView index(HttpServletRequest request) {
+	public ModelAndView index(HttpServletRequest request) throws SecurityException, ProfileServiceException {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", getToken(request));
+		model.put("appsFromDb", getApps(request));
 		return new ModelAndView("index", model);
 	}
 
@@ -150,6 +154,13 @@ public class PortalController extends SCController {
 	public void init() {
 		aacService = new AACService(aacURL, client_id, client_secret);
 		profileService = new BasicProfileService(aacURL);
+	}
+	
+	
+	private String getApps(HttpServletRequest request) throws SecurityException, ProfileServiceException{
+		BasicProfile x=profileService.getBasicProfile(getToken(request));
+		List<String> lstApps=services.loadAppByUserId(x.getUserId());		
+		return JsonUtils.toJSON(lstApps);
 	}
 
 }

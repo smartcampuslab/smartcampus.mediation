@@ -27,10 +27,10 @@ app.controller('MainCtrl',
 			$scope.keyList = [];
 			$scope.allkeyList = [];
 
-			$scope.app = 'ifame';
+			$scope.app = appsFromDb[0];
 
 			$scope.options = {
-				mstep : [ 'ifame', 'studymate' ]
+				mstep : appsFromDb
 			};
 			
 			

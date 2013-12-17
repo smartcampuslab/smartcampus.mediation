@@ -34,6 +34,7 @@
 
 <script >
 var token="<%=request.getAttribute("token")%>";
+var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 
 </script>
 
