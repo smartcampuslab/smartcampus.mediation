@@ -29,6 +29,7 @@ public class KeyWord {
 		this.id = id;
 	}
 
+
 	public List<String> getApps() {
 		return apps;
 	}
@@ -52,5 +53,7 @@ public class KeyWord {
 	public void setTimeupdate(long timeupdate) {
 		this.timeupdate = timeupdate;
 	}
+	
+	
 
 }

@@ -63,16 +63,16 @@
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/content/id/{identity}/{app}"
-		uri="moderator.content.{app}" />
+		uri="moderator.content.manual.{app}" />
 	
 	<resourceMapping method="DELETE"
 		pathPattern="/rest/content/id/{identity}/{app}"
-		uri="moderator.content.{app}" />
+		uri="moderator.content.manual.{app}" />
 	
 	
 	<resourceMapping method="GET"
 		pathPattern="/rest/content/from/{fromdata}/to/{todata}/{app}"
-	uri="moderator.content.{app}" />
+	uri="moderator.content.manual.{app}" />
 
 </service>
 
