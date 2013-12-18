@@ -27,7 +27,8 @@ app.controller('MainCtrl',
 			$scope.keyList = [];
 			$scope.allkeyList = [];
 
-			$scope.app = appsFromDb[0];
+			$scope.app ;
+			
 
 			$scope.options = {
 				mstep : appsFromDb
@@ -39,10 +40,10 @@ app.controller('MainCtrl',
 			
 				$http({
 					method : 'GET',
-					url : 'rest/key/' + $scope.app + '/all',
+					url : 'rest/key/' + $scope.app.appId + '/all',
 					params : {},
 					headers : {
-						Authorization : 'Bearer ' + token
+						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
 					$scope.keyList = data;
@@ -57,7 +58,7 @@ app.controller('MainCtrl',
 					url : 'rest/key/all',
 					params : {},
 					headers : {
-						Authorization : 'Bearer ' + token
+						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
 					$scope.allkeyList = data;
@@ -70,10 +71,10 @@ app.controller('MainCtrl',
 
 				$http({
 					method : 'GET',
-					url : 'rest/comment/remote/' + $scope.app + '/all',
+					url : 'rest/comment/remote/' + $scope.app.appId + '/all',
 					params : {},
 					headers : {
-						Authorization : 'Bearer ' + token
+						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
 					$scope.remoteComment = data;
@@ -86,10 +87,10 @@ app.controller('MainCtrl',
 
 				$http({
 					method : 'GET',
-					url : 'rest/comment/local/' + $scope.app + '/all',
+					url : 'rest/comment/local/' + $scope.app.appId + '/all',
 					params : {},
 					headers : {
-						Authorization : 'Bearer ' + token
+						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
 					$scope. localComment = data;
@@ -101,6 +102,8 @@ app.controller('MainCtrl',
 				});
 
 			};
+			
+			if($scope.app!=undefined)
 			$scope.init();
 			
 			
@@ -115,12 +118,12 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 		if (n != null && n.trim().length > 0) {
 			$http({
 				method : 'POST',
-				url : 'rest/comment/' + _id + '/app/' + $scope.app + '/note/add',
+				url : 'rest/comment/' + _id + '/app/' + $scope.app.appId + '/note/add',
 				params : {
 					"note" : n
 				},
 				headers : {
-					Authorization : 'Bearer ' + token
+					Authorization : 'Bearer ' + $scope.app.appToken
 				}
 			}).success(function(data) {
 				$scope.init();
@@ -139,9 +142,9 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 
 		$http({
 			method : 'PUT',
-			url : 'rest/comment/' + _id +  '/app/' + $scope.app + '/mediationapproved/change/'+stato,
+			url : 'rest/comment/' + _id +  '/app/' + $scope.app.appId + '/mediationapproved/change/'+stato,
 			headers : {
-				Authorization : 'Bearer ' + token
+				Authorization : 'Bearer ' + $scope.app.appToken
 			}
 		}).success(function(data) {
 			$scope.init();
@@ -163,7 +166,7 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 							+ sort_by,
 					params : {},
 					headers : {
-						Authorization : 'Bearer ' + token
+						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
 			$scope.comments = data;
@@ -175,7 +178,8 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 		});
 
 	};
-	$scope.init();
+	if($scope.app!=undefined)
+		$scope.init();
 
 }
 function filtro1Controller($scope, $http, $location, $cookieStore) {
@@ -190,7 +194,7 @@ function filtro1Controller($scope, $http, $location, $cookieStore) {
 					"note" : n
 				},
 				headers : {
-					Authorization : 'Bearer ' + token
+					Authorization : 'Bearer ' + $scope.app.appToken
 				}
 			}).success(function(data) {
 				$scope.init();
@@ -210,7 +214,7 @@ function filtro1Controller($scope, $http, $location, $cookieStore) {
 			method : 'PUT',
 			url : 'rest/comment/' + _id + '/parseapproved/change',
 			headers : {
-				Authorization : 'Bearer ' + token
+				Authorization : 'Bearer ' + $scope.app.appToken
 			}
 		}).success(function(data) {
 			$scope.init();
@@ -227,9 +231,9 @@ function filtro1Controller($scope, $http, $location, $cookieStore) {
 
 		$http({
 			method : 'PUT',
-			url : 'rest/comment/' + _id + '/app/' + $scope.app + '/mediationapproved/change',
+			url : 'rest/comment/' + _id + '/app/' + $scope.app.appId + '/mediationapproved/change',
 			headers : {
-				Authorization : 'Bearer ' + token
+				Authorization : 'Bearer ' + $scope.app.appToken
 			}
 		}).success(function(data) {
 			$scope.init();
@@ -251,7 +255,7 @@ function filtro1Controller($scope, $http, $location, $cookieStore) {
 							+ sort_by,
 					params : {},
 					headers : {
-						Authorization : 'Bearer ' + token
+						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
 			$scope.comments = data;
@@ -263,7 +267,8 @@ function filtro1Controller($scope, $http, $location, $cookieStore) {
 		});
 
 	};
-	$scope.init();
+	if($scope.app!=undefined)
+		$scope.init();
 
 }
 
@@ -272,10 +277,10 @@ function keyController($scope, $http, $location, $cookieStore) {
 	$scope.change = function(key) {
 		$http({
 			method : 'PUT',
-			url : 'rest/key/' + $scope.app,
+			url : 'rest/key/' + $scope.app.appId,
 			data : key,
 			headers : {
-				Authorization : 'Bearer ' + token
+				Authorization : 'Bearer ' + $scope.app.appToken
 			}
 		}).success(function(data) {
 
@@ -293,12 +298,12 @@ function keyController($scope, $http, $location, $cookieStore) {
 
 		$http({
 			method : 'POST',
-			url : 'rest/key/' + $scope.app + '/add',
+			url : 'rest/key/' + $scope.app.appId + '/add',
 			params : {
 				key : key
 			},
 			headers : {
-				Authorization : 'Bearer ' + token
+				Authorization : 'Bearer ' + $scope.app.appToken
 			}
 		}).success(function(data) {
 			$scope.init();

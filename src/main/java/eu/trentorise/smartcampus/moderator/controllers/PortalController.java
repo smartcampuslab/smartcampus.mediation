@@ -1,5 +1,6 @@
 package eu.trentorise.smartcampus.moderator.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +26,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
+import eu.trentorise.smartcampus.moderator.model.AppAndToken;
 import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
 import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
 import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 import eu.trentorise.smartcampus.resourceprovider.controller.SCController;
+import eu.trentorise.smartcampus.resourceprovider.model.App;
 import eu.trentorise.smartcampus.resourceprovider.model.AuthServices;
+import eu.trentorise.smartcampus.vas.ifame.utils.EasyTokenManger;
 
 @Controller
 public class PortalController extends SCController {
@@ -88,7 +92,7 @@ public class PortalController extends SCController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/web")
-	public ModelAndView index(HttpServletRequest request) throws SecurityException, ProfileServiceException {
+	public ModelAndView index(HttpServletRequest request) throws SecurityException, ProfileServiceException, AACException {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", getToken(request));
 		model.put("appsFromDb", getApps(request));
@@ -157,10 +161,20 @@ public class PortalController extends SCController {
 	}
 	
 	
-	private String getApps(HttpServletRequest request) throws SecurityException, ProfileServiceException{
+	private String getApps(HttpServletRequest request) throws SecurityException, ProfileServiceException, AACException{
 		BasicProfile x=profileService.getBasicProfile(getToken(request));
-		List<String> lstApps=services.loadAppByUserId(x.getUserId());		
-		return JsonUtils.toJSON(lstApps);
+		List<App> lstApps=services.loadAppByUserId(x.getUserId());
+		
+		
+		List<AppAndToken> listAppToWeb=new ArrayList<AppAndToken>();
+		
+		for(App app : lstApps){
+			String token=new EasyTokenManger(aacURL, app.getClientId(), app.getClientSecret()).getClientSmartCampusToken();
+			AppAndToken appAndToken=new AppAndToken(app.getAppId(),token);
+			listAppToWeb.add(appAndToken);
+		}
+		
+		return JsonUtils.toJSON(listAppToWeb);
 	}
 	
 	private String getFullRequestPath(HttpServletRequest request) {

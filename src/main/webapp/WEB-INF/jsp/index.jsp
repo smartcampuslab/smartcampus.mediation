@@ -51,7 +51,7 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 
 			<div>
 				Application: <select ng-model="app"
-					ng-options="opt for opt in options.mstep" ng-change="init()"></select>
+					ng-options="opt.appId for opt in options.mstep" ng-change="init()"></select>
 			</div>
 
 			<div ng-model="tabs.index" bs-tabs>
