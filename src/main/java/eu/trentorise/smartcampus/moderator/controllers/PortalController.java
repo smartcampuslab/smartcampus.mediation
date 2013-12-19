@@ -51,11 +51,11 @@ public class PortalController extends SCController {
 	private String aacURL;
 
 	@Autowired
-	@Value("${smartcampus.client.id}")
+	@Value("${smartcampus.clientId}")
 	private String client_id;
 
 	@Autowired
-	@Value("${smartcampus.client.secret}")
+	@Value("${smartcampus.clientSecret}")
 	private String client_secret;
 
 	@Autowired
