@@ -38,6 +38,7 @@ public class EasyTokenManger {
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
 		this.profileAddress = profileAddress;
+		if (!profileAddress.endsWith("/")) this.profileAddress += "/";
 	}
 
 	public String getClientSmartCampusToken() throws AACException {
@@ -48,6 +49,7 @@ public class EasyTokenManger {
 		String url = profileAddress + PATH_TOKEN + "?client_id=" + clientId
 				+ "&client_secret=" + clientSecret
 				+ "&grant_type=client_credentials";
+		
 		final HttpPost post = new HttpPost(url);
 		post.setEntity(entity);
 		post.setHeader("Accept", "application/json");

@@ -41,6 +41,11 @@ import eu.trentorise.smartcampus.resourceprovider.model.AuthServices;
 @Controller
 public class PortalController extends SCController {
 
+	private static final String MODERATOR_SERVICE_ID = "smartcampus.moderation";
+	private static final String MODERATOR_RESOURCE_PARAMETER_ID = "app";
+
+
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -171,6 +176,7 @@ public class PortalController extends SCController {
 		List<AppAndToken> listAppToWeb=new ArrayList<AppAndToken>();
 		
 		for(ResourceParameter rp : lstResourceParameters){
+			if (!MODERATOR_SERVICE_ID.equals(rp.getServiceId()) && !MODERATOR_RESOURCE_PARAMETER_ID.equals(rp.getResourceId())) continue;
 			ClientDetails cd = services.loadClientByClientId(rp.getClientId());
 			String token=new EasyTokenManger(aacURL, rp.getClientId(), cd.getClientSecret()).getClientSmartCampusToken();
 			AppAndToken appAndToken=new AppAndToken(rp.getValue(),token);

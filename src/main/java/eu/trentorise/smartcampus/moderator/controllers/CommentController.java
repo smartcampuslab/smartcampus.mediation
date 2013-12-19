@@ -74,7 +74,7 @@ public class CommentController {
 					.getBoolean("keywordApproved"));
 			messageToMediationService.setTimestamp(o.getLong("timestamp"));
 			if (o.has("note"))
-				messageToMediationService.setNote(o.getString("note"));
+				messageToMediationService.setNote(o.optString("note", null));
 
 			return messageToMediationService;
 		} catch (JSONException e) {
