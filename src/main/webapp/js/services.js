@@ -5,7 +5,7 @@ app.controller('MainCtrl',
 		function($scope, $http, $window, $location) {
 
 			// The tab directive will use this data
-			$scope.tabs = [ 'Parole chiavi', 'Da approvare', 'Log del parser su app' ];
+			$scope.tabs = [ 'KeyWord', 'To Approve', 'Keyword Filter Log' ];
 			$scope.tabs.index = 0;
 			$scope.tabs.active = function() {
 				return $scope.tabs[$scope.tabs.index];
@@ -112,6 +112,12 @@ app.controller('MainCtrl',
 
 
 function filtro2Controller($scope, $http, $location, $cookieStore) {
+	
+	$scope.viewtext=function(text){
+		if(text=="null")
+			text= "";
+		var mess=confirm(text);
+	}
 
 	$scope.editNote = function(_id,note) {
 		var n = prompt("Add note to this comment ", ""+note);
@@ -137,8 +143,8 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 	};
 
 	
-	$scope.changeMediationApproved = function(_id,stato) {
-		//var n = prompt("Attention ");
+	$scope.changeMediationApproved = function(_id,stato,note) {
+		$scope.editNote(_id,note);
 
 		$http({
 			method : 'PUT',
@@ -183,32 +189,17 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 
 }
 function filtro1Controller($scope, $http, $location, $cookieStore) {
+	$scope.viewtext=function(text){
+		if(text=="null")
+			text= "";
+		
+		var mess=confirm(text);
+	}
 
-	$scope.editNote = function(_id) {
-		var n = prompt("Add note to this comment ", "..." + _id);
-		if (n != null && n.trim().length > 0) {
-			$http({
-				method : 'POST',
-				url : 'rest/comment/' + _id + '/note/add',
-				params : {
-					"note" : n
-				},
-				headers : {
-					Authorization : 'Bearer ' + $scope.app.appToken
-				}
-			}).success(function(data) {
-				$scope.init();
-				// $scope.info = 'Find latest comments inserted';
-				// $scope.error = '';
-			}).error(function(data) {
-				// $scope.info = '';
-				// $scope.error = "No comments found";
-			});
-		}
-	};
+	
 
 	$scope.changeParseApproved = function(_id) {
-	
+		
 
 		$http({
 			method : 'PUT',
@@ -226,25 +217,7 @@ function filtro1Controller($scope, $http, $location, $cookieStore) {
 		});
 
 	};
-	$scope.changeMediationApproved = function(_id) {
 	
-
-		$http({
-			method : 'PUT',
-			url : 'rest/comment/' + _id + '/app/' + $scope.app.appId + '/mediationapproved/change',
-			headers : {
-				Authorization : 'Bearer ' + $scope.app.appToken
-			}
-		}).success(function(data) {
-			$scope.init();
-			// $scope.info = 'Find latest comments inserted';
-			// $scope.error = '';
-		}).error(function(data) {
-			// $scope.info = '';
-			// $scope.error = "No comments found";
-		});
-
-	};
 
 	$scope.filterByApplication = function(sort_by) {
 
@@ -320,19 +293,21 @@ function keyController($scope, $http, $location, $cookieStore) {
 
 }
 
+
+
 angular.module('filters', []).filter('truncate', function() {
 	return function(text, length, end) {
 		if (isNaN(length))
-			length = 60;
+		length = 60;
 
-//		if (end === undefined)
-//			end = "...";
-//
-//		if (text.length <= length || text.length - end.length <= length) {
-//			return text;
-//		} else {
-//			return String(text).substring(0, length - end.length) + end;
-//		}
+		if (end === undefined)
+			end = "...";
+
+		if (text.length <= length || text.length - end.length <= length) {
+			return text;
+		} else {
+			return String(text).substring(0, length - end.length) + end;
+		}		
 
 	};
 }).filter('dateformat', function() {

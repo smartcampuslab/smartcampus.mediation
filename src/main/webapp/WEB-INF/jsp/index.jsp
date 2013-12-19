@@ -35,9 +35,9 @@
 <script >
 var token="<%=request.getAttribute("token")%>";
 var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
-
+var user_name=<%=request.getAttribute("user")%>;
+document.getElementById("developer").innerHTML=user_name;
 </script>
-
 
 </head>
 
@@ -47,23 +47,25 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 	<div class="container"
 		style="text-align: center; padding-top: 5%; height: 600px">
 		
+		
 		<section id="tab" style="height: 550px">
 
-			<div>
+			<div class="account">
+			    Developer: <span id="developer"></span><br/>
 				Application: <select ng-model="app"
 					ng-options="opt.appId for opt in options.mstep" ng-change="init()"></select>
 			</div>
 
-			<div ng-model="tabs.index" bs-tabs>
+			<div class="tab_menu" ng-model="tabs.index" bs-tabs>
 				<div ng-repeat="tab in tabs" data-title="{{tab}}"></div>
 			</div>
 
-			<div ng-show="tabs.active() == 'Da approvare'" >
+			<div ng-show="tabs.active() == 'To Approve'" >
 
 
 				<div ng-controller="filtro2Controller" class="container"
 					style="text-align: center; padding-top: 5%;">
-					<h1>Commenti da approvare</h1>
+					<h1>Content to approve</h1>
 
 					<div class="row">
 						<div class="span12">
@@ -85,6 +87,7 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 
 
 						</div>
+						
 
 
 
@@ -93,11 +96,11 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 						<table class="table table-striped table-condensed">
 							<thead>
 								<tr>								
-									<th>Data inserimento</th>
-									<th>ID commento</th>
+									<th>Sended date</th>
+									<th>ID Content</th>
 									<th>ID user</th>
-									<th>Testo</th>
-									<th>Approvato da portale</th>
+									<th>Content text</th>
+									<th>Approved by manual</th>
 									<th>Note</th>
 
 								</tr>
@@ -108,7 +111,7 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 									<td>{{comment.timestamp | dateformat}}</td>
 									<td>{{comment.objectId}}</td>
 									<td>{{comment.userid}}</td>
-									<td>{{comment.objectText|truncate}}</td>
+									<td><a href="" ng-click="viewtext(comment.objectText)">{{comment.objectText|truncate}}</a></td>
 
 
 
@@ -121,10 +124,10 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 													data-toggle="dropdown" href="#"> <span
 													class="icon-caret-down"></span></a>
 												<ul class="dropdown-menu">
-													<li><a href="" ng-click="changeMediationApproved(comment._id,'APPROVED')"><i
+													<li><a href="" ng-click="changeMediationApproved(comment._id,'APPROVED',comment.note)"><i
 															class="fa fa-check"></i> Approve</a></li>
 													<li><a href=""
-														ng-click="changeMediationApproved(comment._id,'NOT_APPROVED')"><i
+														ng-click="changeMediationApproved(comment._id,'NOT_APPROVED',comment.note)"><i
 															class="fa fa-minus-circle"></i> Block</a></li>
 												</ul>
 											</div>
@@ -137,10 +140,10 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 													data-toggle="dropdown" href="#"> <span
 													class="icon-caret-down"></span></a>
 												<ul class="dropdown-menu">
-													<li><a href="" ng-click="changeMediationApproved(comment._id,'APPROVED')"><i
+													<li><a href="" ng-click="changeMediationApproved(comment._id,'APPROVED',comment.note)"><i
 															class="fa fa-check"></i> Approved</a></li>
 													<li><a href=""
-														ng-click="changeMediationApproved(comment._id,'WAITING')"><i
+														ng-click="changeMediationApproved(comment._id,'WAITING',comment.note)"><i
 															class="fa fa-clock-o"></i> Sospend</a></li>
 												</ul>
 											</div>
@@ -153,10 +156,10 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 													data-toggle="dropdown" href="#"> <span
 													class="icon-caret-down"></span></a>
 												<ul class="dropdown-menu">
-													<li><a href="" ng-click="changeMediationApproved(comment._id,'WAITING')"><i
+													<li><a href="" ng-click="changeMediationApproved(comment._id,'WAITING',comment.note)"><i
 															class="fa fa-clock-o"></i> Sospend</a></li>
 													<li><a href=""
-														ng-click="changeMediationApproved(comment._id,'NOT_APPROVED')"><i
+														ng-click="changeMediationApproved(comment._id,'NOT_APPROVED',comment.note)"><i
 															class="fa fa-minus-circle"></i> Block</a></li>
 												</ul>
 											</div>
@@ -185,11 +188,11 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 
 			</div>
 
-			<div ng-show="tabs.active() == 'Log del parser su app'">
+			<div ng-show="tabs.active() == 'Keyword Filter Log'">
 
 				<div ng-controller="filtro1Controller" class="container"
 					style="text-align: center; padding-top: 5%;">
-					<h1>Commenti da controllo automatico </h1>
+					<h1>Keyword Filter Log</h1>
 
 					<div class="row">
 						<div class="span12">
@@ -218,11 +221,11 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 							<thead>
 								<tr>
 									
-									<th>Data inserimento</th>
-									<th>ID commento</th>
+									<th>Sended date </th>
+									<th>ID Content</th>
 									<th>ID user</th>
-									<th>Testo</th>
-									<th>Approvato da controllo automatico</th>
+									<th>Content Text</th>
+									<th>Approved by keyword filter</th>
 
 									<th>Note</th>
 
@@ -235,7 +238,7 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 									<td>{{comment.timestamp | dateformat}}</td>
 									<td>{{comment.objectId}}</td>
 									<td>{{comment.userid}}</td>
-									<td>{{comment.objectText|truncate}}</td>
+									<td><a href="" ng-click="viewtext(comment.objectText)">{{comment.objectText|truncate}}</a></td>
 																		
 									<td ng-switch on="comment.keywordApproved"><span
 										ng-switch-when="false">
@@ -279,17 +282,17 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 			</div>
 
 
-			<div ng-show="tabs.active() == 'Parole chiavi'">
+			<div ng-show="tabs.active() == 'KeyWord'">
 
 
 				<div ng-controller="keyController" class="container"
 					style="text-align: center; padding-top: 5%;">
 
 					<div class="span3" style="height: 350px; padding-right: 20px;">
-						Chiavi presenti nel sistema <br /> <br />
+						keyword in system <br /> <br />
 						<div>
 
-							Filtra: <input type="search" ng-model="f"
+							Filter: <input type="search" ng-model="f"
 								placeholder="filter apps..." />
 
 						</div>
@@ -309,10 +312,10 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 
 					<div class="span3"
 						style="height: 350px; padding-right: 20px; border-left: 1px solid #eeeeee;">
-						chiavi attive su questa app <br /> <br />
+						active keyword in this app <br /> <br />
 						<div>
 
-							Filtra: <input type="search" ng-model="p"
+							Filter: <input type="search" ng-model="p"
 								placeholder="filter apps..." />
 
 						</div>
@@ -332,7 +335,7 @@ var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 
 					<div class="span3"
 						style="border-left: 1px solid #eeeeee; height: 350px">
-						Inserisci nuova chiave nel sistema/app <br /> <br />
+						Insert keyword in app filter <br /> <br />
 						<form name="myForm">
 							key : <input type="text" name="key" ng-model="key" required>
 							<span class="error" ng-show="myForm.$error.required">Required!</span>

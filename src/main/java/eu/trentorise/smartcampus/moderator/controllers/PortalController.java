@@ -103,6 +103,8 @@ public class PortalController extends SCController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", getToken(request));
 		model.put("appsFromDb", getApps(request));
+		BasicProfile user=profileService.getBasicProfile(getToken(request));
+		model.put("user", user.getSurname()+","+user.getName());
 		return new ModelAndView("index", model);
 	}
 
@@ -170,7 +172,7 @@ public class PortalController extends SCController {
 	
 	private String getApps(HttpServletRequest request) throws SecurityException, ProfileServiceException, AACException{
 		BasicProfile x=profileService.getBasicProfile(getToken(request));
-		List<ResourceParameter> lstResourceParameters=services.loadAppByUserId(x.getUserId());
+		List<ResourceParameter> lstResourceParameters=services.loadResourceParameterByUserId(x.getUserId());
 		
 		
 		List<AppAndToken> listAppToWeb=new ArrayList<AppAndToken>();

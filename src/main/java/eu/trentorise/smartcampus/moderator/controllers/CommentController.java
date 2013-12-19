@@ -29,9 +29,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
+import eu.trentorise.smartcampus.moderator.model.DeletedContentToModeratorService;
 import eu.trentorise.smartcampus.moderator.model.State;
 
 @Controller
@@ -87,7 +89,7 @@ public class CommentController {
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/app/{app}/note/add")
 	public @ResponseBody
 	boolean addNote(HttpServletRequest request, @PathVariable String _id,
-			@PathVariable String app, @RequestBody String note) {
+			@PathVariable String app, @RequestParam String note) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(_id));
@@ -172,7 +174,11 @@ public class CommentController {
 		query2.addCriteria(Criteria.where("objectId").is(identity));
 		query2.addCriteria(Criteria.where("webappname").regex(app));
 
-		db.remove(query2, ContentToModeratorService.class);
+		ContentToModeratorService toDelete=db.findOne(query2, ContentToModeratorService.class);
+		DeletedContentToModeratorService deletedmessage=new DeletedContentToModeratorService(toDelete, app);
+		db.save(deletedmessage);
+		db.remove(toDelete);
+		
 
 	}
 }
