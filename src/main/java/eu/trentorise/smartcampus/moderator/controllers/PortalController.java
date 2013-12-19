@@ -49,6 +49,9 @@ public class PortalController extends SCController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	@Autowired
+	@Value("${aacExtURL}")
+	private String aacExtURL;
 	
 
 	@Autowired
@@ -165,7 +168,7 @@ public class PortalController extends SCController {
 
 	@PostConstruct
 	public void init() {
-		aacService = new AACService(aacURL, client_id, client_secret);
+		aacService = new AACService(aacExtURL, client_id, client_secret);
 		profileService = new BasicProfileService(aacURL);
 	}
 	
