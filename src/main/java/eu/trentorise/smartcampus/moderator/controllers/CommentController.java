@@ -19,8 +19,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -45,10 +43,10 @@ public class CommentController {
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/app/{app}/add")
 	public @ResponseBody
 	boolean addCommento(HttpServletRequest request,
-			@RequestBody String messageToMediationService,
+			@RequestBody ContentToModeratorService messageToMediationService,
 			@PathVariable String app) {
 
-		ContentToModeratorService mediationService = valueOf(messageToMediationService);
+		ContentToModeratorService mediationService = messageToMediationService;
 
 		db.save(mediationService);
 
@@ -56,30 +54,6 @@ public class CommentController {
 		query2.addCriteria(Criteria.where("objectId").is(
 				mediationService.getObjectId()));
 		return db.findOne(query2, ContentToModeratorService.class) != null;
-	}
-
-	private ContentToModeratorService valueOf(String json) {
-		try {
-			JSONObject o = new JSONObject(json);
-			String webapp = o.getString("webappname");
-			String entityTesto = o.getString("objectText");
-			String userid = o.getString("userid");
-			String entityId = o.getString("objectId");
-
-			ContentToModeratorService messageToMediationService = new ContentToModeratorService(
-					webapp, entityId, entityTesto, userid);
-			messageToMediationService.setManualApproved(State.valueOf(o
-					.getString("manualApproved")));
-			messageToMediationService.setKeywordApproved(o
-					.getBoolean("keywordApproved"));
-			messageToMediationService.setTimestamp(o.getLong("timestamp"));
-			if (o.has("note"))
-				messageToMediationService.setNote(o.optString("note", null));
-
-			return messageToMediationService;
-		} catch (JSONException e) {
-			return null;
-		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/local/{app}/all")
