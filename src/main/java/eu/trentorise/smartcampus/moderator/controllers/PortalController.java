@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,7 @@ import eu.trentorise.smartcampus.profileservice.BasicProfileService;
 import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
 import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 import eu.trentorise.smartcampus.resourceprovider.controller.SCController;
-import eu.trentorise.smartcampus.resourceprovider.model.App;
+import eu.trentorise.smartcampus.resourceprovider.model.ResourceParameter;
 import eu.trentorise.smartcampus.resourceprovider.model.AuthServices;
 
 
@@ -164,14 +165,15 @@ public class PortalController extends SCController {
 	
 	private String getApps(HttpServletRequest request) throws SecurityException, ProfileServiceException, AACException{
 		BasicProfile x=profileService.getBasicProfile(getToken(request));
-		List<App> lstApps=services.loadAppByUserId(x.getUserId());
+		List<ResourceParameter> lstResourceParameters=services.loadAppByUserId(x.getUserId());
 		
 		
 		List<AppAndToken> listAppToWeb=new ArrayList<AppAndToken>();
 		
-		for(App app : lstApps){
-			String token=new EasyTokenManger(aacURL, app.getClientId(), app.getClientSecret()).getClientSmartCampusToken();
-			AppAndToken appAndToken=new AppAndToken(app.getAppId(),token);
+		for(ResourceParameter rp : lstResourceParameters){
+			ClientDetails cd = services.loadClientByClientId(rp.getClientId());
+			String token=new EasyTokenManger(aacURL, rp.getClientId(), cd.getClientSecret()).getClientSmartCampusToken();
+			AppAndToken appAndToken=new AppAndToken(rp.getValue(),token);
 			listAppToWeb.add(appAndToken);
 		}
 		
