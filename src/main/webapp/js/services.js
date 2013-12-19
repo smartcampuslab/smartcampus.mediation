@@ -325,14 +325,14 @@ angular.module('filters', []).filter('truncate', function() {
 		if (isNaN(length))
 			length = 60;
 
-		if (end === undefined)
-			end = "...";
-
-		if (text.length <= length || text.length - end.length <= length) {
-			return text;
-		} else {
-			return String(text).substring(0, length - end.length) + end;
-		}
+//		if (end === undefined)
+//			end = "...";
+//
+//		if (text.length <= length || text.length - end.length <= length) {
+//			return text;
+//		} else {
+//			return String(text).substring(0, length - end.length) + end;
+//		}
 
 	};
 }).filter('dateformat', function() {

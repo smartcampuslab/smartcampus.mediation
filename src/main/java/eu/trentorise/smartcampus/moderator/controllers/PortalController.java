@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
 import eu.trentorise.smartcampus.moderator.model.AppAndToken;
+import eu.trentorise.smartcampus.moderator.utils.EasyTokenManger;
 import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
 import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
@@ -34,7 +35,7 @@ import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 import eu.trentorise.smartcampus.resourceprovider.controller.SCController;
 import eu.trentorise.smartcampus.resourceprovider.model.App;
 import eu.trentorise.smartcampus.resourceprovider.model.AuthServices;
-import eu.trentorise.smartcampus.vas.ifame.utils.EasyTokenManger;
+
 
 @Controller
 public class PortalController extends SCController {

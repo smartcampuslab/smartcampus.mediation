@@ -1,4 +1,4 @@
-package eu.trentorise.smartcampus.vas.ifame.utils;
+package eu.trentorise.smartcampus.moderator.utils;
 
 import java.io.IOException;
 
