@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
-import eu.trentorise.smartcampus.moderator.model.DeletedContentToModeratorService;
+import eu.trentorise.smartcampus.moderator.model.LogContentToModeratorService;
 import eu.trentorise.smartcampus.moderator.model.State;
 
 @Controller
@@ -51,6 +51,9 @@ public class CommentController {
 		ContentToModeratorService mediationService = messageToMediationService;
 
 		db.save(mediationService);
+		
+		LogContentToModeratorService deletedmessage=new LogContentToModeratorService(mediationService, app,LogContentToModeratorService.ACTION_ADD);
+		db.save(deletedmessage);
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("objectId").is(
@@ -115,8 +118,9 @@ public class CommentController {
 		ContentToModeratorService mediationService = db.findOne(query2,
 				ContentToModeratorService.class);
 
-		mediationService.setManualApproved(State.valueOf(stato));
-		mediationService.setTimestamp(System.currentTimeMillis());
+		mediationService.setManualApproved(State.valueOf(stato)); 		
+		LogContentToModeratorService deletedmessage=new LogContentToModeratorService(mediationService, app,stato);
+		db.save(deletedmessage);
 
 		db.save(mediationService);
 
@@ -175,7 +179,7 @@ public class CommentController {
 		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		ContentToModeratorService toDelete=db.findOne(query2, ContentToModeratorService.class);
-		DeletedContentToModeratorService deletedmessage=new DeletedContentToModeratorService(toDelete, app);
+		LogContentToModeratorService deletedmessage=new LogContentToModeratorService(toDelete, app,LogContentToModeratorService.ACTION_DELETE);
 		db.save(deletedmessage);
 		db.remove(toDelete);
 		

@@ -3,6 +3,8 @@ var app = angular.module('dev', [ 'ngResource', 'ngCookies', 'filters',
 
 app.controller('MainCtrl',
 		function($scope, $http, $window, $location) {
+	
+	document.getElementById("developer").innerHTML=user_name;
 
 			// The tab directive will use this data
 			$scope.tabs = [ 'KeyWord', 'To Approve', 'Keyword Filter Log' ];
@@ -37,6 +39,8 @@ app.controller('MainCtrl',
 			
 
 			$scope.init = function() {
+
+				
 			
 				$http({
 					method : 'GET',

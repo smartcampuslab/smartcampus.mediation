@@ -35,8 +35,9 @@
 <script >
 var token="<%=request.getAttribute("token")%>";
 var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
-var user_name=<%=request.getAttribute("user")%>;
-document.getElementById("developer").innerHTML=user_name;
+var user_name="<%=request.getAttribute("user")%>";
+
+
 </script>
 
 </head>
@@ -50,7 +51,7 @@ document.getElementById("developer").innerHTML=user_name;
 		
 		<section id="tab" style="height: 550px">
 
-			<div class="account">
+			<div class="account" style="height: 120px;margin-left: 70%;">
 			    Developer: <span id="developer"></span><br/>
 				Application: <select ng-model="app"
 					ng-options="opt.appId for opt in options.mstep" ng-change="init()"></select>
