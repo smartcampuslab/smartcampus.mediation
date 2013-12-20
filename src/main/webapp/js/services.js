@@ -4,8 +4,7 @@ var app = angular.module('dev', [ 'ngResource', 'ngCookies', 'filters',
 app.controller('MainCtrl',
 		function($scope, $http, $window, $location) {
 	
-	document.getElementById("developer").innerHTML=user_name;
-
+	
 			// The tab directive will use this data
 			$scope.tabs = [ 'KeyWord', 'To Approve', 'Keyword Filter Log' ];
 			$scope.tabs.index = 0;
@@ -82,6 +81,11 @@ app.controller('MainCtrl',
 					}
 				}).success(function(data) {
 					$scope.remoteComment = data;
+					var notCheck=0;
+					for(var i =0;i<data.length;i++)
+						if(data[i].manualApproved=="WAITING")
+							notCheck+=1;
+					document.getElementById("manualCount").innerHTML=notCheck+"/"+$scope.remoteComment.length+" Manual Content";
 					// $scope.info = 'Find latest comments inserted';
 					// $scope.error = '';
 				}).error(function(data) {
@@ -97,20 +101,27 @@ app.controller('MainCtrl',
 						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
-					$scope. localComment = data;
+					$scope.localComment = data;
+					document.getElementById("keywordCount").innerHTML=$scope.localComment.length+" KeyWord Content";
 					// $scope.info = 'Find latest comments inserted';
 					// $scope.error = '';
 				}).error(function(data) {
 					// $scope.info = '';
 					// $scope.error = "No comments found";
 				});
+				
+				
+				
 
 			};
 			
 			if($scope.app!=undefined)
 			$scope.init();
 			
-			
+			document.getElementById("developer").innerHTML=user_name;
+			document.getElementById("manualCount").innerHTML=$scope.remoteComment.length+" Manual Content";
+			document.getElementById("keywordCount").innerHTML=$scope.localComment.length+" KeyWord Content";
+
 
 		});
 
@@ -148,22 +159,40 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 
 	
 	$scope.changeMediationApproved = function(_id,stato,note) {
-		$scope.editNote(_id,note);
+		
+		var n = prompt("Add note to this comment ", ""+note);
+		if (n != null && n.trim().length > 0) {
+			$http({
+				method : 'POST',
+				url : 'rest/comment/' + _id + '/app/' + $scope.app.appId + '/note/add',
+				params : {
+					"note" : n
+				},
+				headers : {
+					Authorization : 'Bearer ' + $scope.app.appToken
+				}
+			}).success(function(data) {
+				$http({
+					method : 'PUT',
+					url : 'rest/comment/' + _id +  '/app/' + $scope.app.appId + '/mediationapproved/change/'+stato,
+					headers : {
+						Authorization : 'Bearer ' + $scope.app.appToken
+					}
+				}).success(function(data) {
+					$scope.init();
+					// $scope.info = 'Find latest comments inserted';
+					// $scope.error = '';
+				}).error(function(data) {
+					// $scope.info = '';
+					// $scope.error = "No comments found";
+				});
+			}).error(function(data) {
+				// $scope.info = '';
+				// $scope.error = "No comments found";
+			});
+		}
 
-		$http({
-			method : 'PUT',
-			url : 'rest/comment/' + _id +  '/app/' + $scope.app.appId + '/mediationapproved/change/'+stato,
-			headers : {
-				Authorization : 'Bearer ' + $scope.app.appToken
-			}
-		}).success(function(data) {
-			$scope.init();
-			// $scope.info = 'Find latest comments inserted';
-			// $scope.error = '';
-		}).error(function(data) {
-			// $scope.info = '';
-			// $scope.error = "No comments found";
-		});
+		
 
 	};
 
