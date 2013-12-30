@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
 import eu.trentorise.smartcampus.moderator.model.AppAndToken;
+import eu.trentorise.smartcampus.moderator.model.ModeratorForApps;
 import eu.trentorise.smartcampus.moderator.utils.EasyTokenManger;
 import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
@@ -44,7 +49,8 @@ public class PortalController extends SCController {
 	private static final String MODERATOR_SERVICE_ID = "smartcampus.moderation";
 	private static final String MODERATOR_RESOURCE_PARAMETER_ID = "app";
 
-
+	@Autowired
+	MongoTemplate db;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -187,6 +193,12 @@ public class PortalController extends SCController {
 			AppAndToken appAndToken=new AppAndToken(rp.getValue(),token);
 			listAppToWeb.add(appAndToken);
 		}
+		
+		Query query2 = new Query();
+		query2.sort().on("endTime", Order.DESCENDING);
+		query2.addCriteria(Criteria.where("userId").regex(x.getUserId()));
+
+		List<ModeratorForApps> listModeratorForApps= db.find(query2, ModeratorForApps.class);
 		
 		return JsonUtils.toJSON(listAppToWeb);
 	}
