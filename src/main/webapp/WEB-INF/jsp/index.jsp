@@ -50,7 +50,7 @@ var user_name="<%=request.getAttribute("user")%>";
 			<h1>Moderator Console</h1>
 		</div>
 		<div class="row">
-			<div class="span7 "></div>
+			<div class="span6 "></div>
 			<div class="span4 well">
 				<div class="row">
 					<div class="span1">
