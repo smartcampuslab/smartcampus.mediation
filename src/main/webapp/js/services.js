@@ -6,7 +6,7 @@ app.controller('MainCtrl',
 	
 	
 			// The tab directive will use this data
-			$scope.tabs = [ 'KeyWord', 'To Approve', 'Keyword Filter Log' ];
+			$scope.tabs = [  'To Approve','KeyWord', 'Keyword Filter Log' ];
 			$scope.tabs.index = 0;
 			$scope.tabs.active = function() {
 				return $scope.tabs[$scope.tabs.index];
@@ -135,8 +135,11 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 	}
 
 	$scope.editNote = function(_id,note) {
+
+		if(note=="null")
+			note= "";
 		var n = prompt("Add note to this comment ", ""+note);
-		if (n != null && n.trim().length > 0) {
+		if (n != null ) {
 			$http({
 				method : 'POST',
 				url : 'rest/comment/' + _id + '/app/' + $scope.app.appId + '/note/add',
@@ -160,8 +163,10 @@ function filtro2Controller($scope, $http, $location, $cookieStore) {
 	
 	$scope.changeMediationApproved = function(_id,stato,note) {
 		
+		if(note=="null")
+			note= "";
 		var n = prompt("Add note to this comment ", ""+note);
-		if (n != null && n.trim().length > 0) {
+		if (n != null) {
 			$http({
 				method : 'POST',
 				url : 'rest/comment/' + _id + '/app/' + $scope.app.appId + '/note/add',

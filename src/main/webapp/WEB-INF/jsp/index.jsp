@@ -4,7 +4,7 @@
 
 <head lang="en">
 <meta charset="utf-8">
-<title>AngularStrap - Tab directive</title>
+<title>Moderation Console</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -47,7 +47,7 @@ var user_name="<%=request.getAttribute("user")%>";
 <body ng-controller="MainCtrl">
 	<div class="container" style="width: 65%;">
 		<div class="row" style="height: 120px">
-			<h1>Moderator Console</h1>
+			<h1>Moderation Console</h1>
 		</div>
 		<div class="row">
 			<div class="span6 "></div>
