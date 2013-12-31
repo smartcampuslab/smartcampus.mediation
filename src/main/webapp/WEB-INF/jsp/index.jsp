@@ -16,6 +16,10 @@
 	href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css"
 	rel="stylesheet">
 
+<link
+	href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.css"
+	rel="stylesheet">
+
 
 
 <!-- required libraries -->
@@ -33,6 +37,8 @@
 <script src="lib/prettify.js"></script>
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-cookies.min.js"></script>
+<script
+	src="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.js"></script>
 
 <script>
 var token="<%=request.getAttribute("token")%>";
@@ -89,11 +95,11 @@ var user_name="<%=request.getAttribute("user")%>";
 
 					<div ng-controller="filtro2Controller" class="container"
 						style="text-align: center; padding-top: 5%;">
-						
+
 
 						<div class="row">
 							<div class="span12">
-<div class="span8"></div>
+								<div class="span8"></div>
 
 								<div class="span3">
 
@@ -218,11 +224,11 @@ var user_name="<%=request.getAttribute("user")%>";
 
 					<div ng-controller="filtro1Controller" class="container"
 						style="text-align: center; padding-top: 5%;">
-				
+
 
 						<div class="row">
 							<div class="span12">
-<div class="span8"></div>
+								<div class="span8"></div>
 
 								<div class="span3">
 									Filtra: <input type="search" ng-model="q"
@@ -376,13 +382,94 @@ var user_name="<%=request.getAttribute("user")%>";
 
 				</div>
 
+				<div ng-show="tabs.active() == 'Moderator List for this app'">
+
+					<div ng-controller="ModeratorsController" class="container"
+						style="text-align: center; padding-top: 5%;">
+						<div class="row-fluid">
 
 
+							<div class="span12" style="min-height: 100px;">
+
+
+
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr>
+
+											<th>Start date</th>
+											<th>End Date</th>
+											<th>Name</th>
+											<th>Surname</th>
+											<th>Manage</th>
+
+
+
+										</tr>
+									</thead>
+									<tbody class="animate-repeat" ng-repeat="mod in moderators">
+										<tr>
+
+											<td>{{mod.startTime | dateformat}}</td>
+											<td>{{mod.endTime | dateformat}}</td>
+											<td>{{mod.name}}</td>
+											<td>{{mod.surname}}</td>
+											<td><span> <a href=""
+													ng-click="change(keyword.keyword)"><i
+														class="icon-fixed-width icon-remove"></i> </a></span></td>
+
+										</tr>
+
+
+
+
+									</tbody>
+								</table>
+
+							</div>
+							<div class="row-fluid">
+
+								<div class="span6" style="height: 350px; padding-right: 20px;">
+									Profile in system <br /> <br />
+									<div>
+
+										Filter: <input type="search" ng-model="f"
+											placeholder="filter profiles..." />
+
+									</div>
+									<div class="span12" style="height: 300px; overflow: auto;">
+										<ul>
+											<li style="list-style-type: none; text-decoration: none"
+												ng:repeat="profile in profiles | filter:f"><a href=""
+												style="text-decoration: none"
+												ng-click="addModerator(profile)"><i
+													class="icon-fixed-width icon-user"></i>
+													{{profile.name}},{{profile.surname}}</a></li>
+
+										</ul>
+									</div>
+								</div>
+
+								<div class="span6"
+									style="height: 350px; padding-right: 20px; border-left: 1px solid #eeeeee;">
+
+									<label>Name: {{$scope.possibleModerator.name}}</label>
+
+								</div>
+
+
+
+
+							</div>
+						</div>
+
+					</div>
+					</div>
 			</section>
 			<hr>
 		</div>
 
-	
+
 
 
 

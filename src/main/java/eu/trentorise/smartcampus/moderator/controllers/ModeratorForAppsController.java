@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
 import eu.trentorise.smartcampus.moderator.model.AppAndToken;
 import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
@@ -90,9 +91,14 @@ public class ModeratorForAppsController extends SCController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/moderator/app/{app}/add")
 	public @ResponseBody
-	void addModerator(HttpServletRequest request,@PathVariable String app,@RequestBody List<String> userIds) throws ProfileServiceException {
-		BasicProfile ownerProfile=profileService.getBasicProfile(getToken(request));
-		List<BasicProfile> listModerator=profileService.getBasicProfilesByUserId(userIds, getToken(request));
+	void addModerator(HttpServletRequest request,@PathVariable String app,@RequestBody List<String> userIds) throws ProfileServiceException, AACException {
+		
+		///clean after test
+		BasicProfile ownerProfile=profileService.getBasicProfile("d795d89d-5de9-44ac-ab6a-1b9940e1dda8");
+		
+		//load profiles like client core.moderator
+		String token=new EasyTokenManger(aacURL, client_id, client_secret).getClientSmartCampusToken();
+		List<BasicProfile> listModerator=profileService.getBasicProfilesByUserId(userIds, token);
 		
 		String clientIdOfApp="";
 		
@@ -106,11 +112,27 @@ public class ModeratorForAppsController extends SCController {
 		}
 				
 		long startTime=System.currentTimeMillis();
-		long endtime=startTime + Long.valueOf("2628000000");
+		long endtime=startTime + Long.valueOf("2628000000");		
+		
+		ModeratorForApps newModeratorIstance=null;
 		
 		for(BasicProfile index : listModerator){
-			ModeratorForApps newModeratorIstance=new ModeratorForApps(index,app,ownerProfile.getUserId(),startTime,endtime,clientIdOfApp);
+			Query insert=new Query();
+			insert.addCriteria(Criteria.where("userId").regex(index.getUserId()));
+			insert.addCriteria(Criteria.where("appId").regex(app));
+			newModeratorIstance=db.findOne(insert, ModeratorForApps.class);
+			if(newModeratorIstance==null){			
+				newModeratorIstance=new ModeratorForApps(index,app,ownerProfile.getUserId(),startTime,endtime,clientIdOfApp);
+			}else{
+				db.remove(newModeratorIstance);
+				//if was moderator for this app,update the parent and the time
+				newModeratorIstance.setParentUserId(ownerProfile.getUserId());
+				newModeratorIstance.setStartTime(startTime);
+				newModeratorIstance.setEndTime(endtime);
+			}
+			
 			db.save(newModeratorIstance);
+			
 		}		
 		
 	}
@@ -124,6 +146,27 @@ public class ModeratorForAppsController extends SCController {
 		query2.addCriteria(Criteria.where("appId").regex(app));
 
 		return db.find(query2, ModeratorForApps.class);
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/moderator/app/{app}")
+	public @ResponseBody
+	ModeratorForApps updateModerator(HttpServletRequest request,@PathVariable String app,@RequestBody ModeratorForApps moderatorToUpdate) throws SecurityException{
+
+		Query insert=new Query();
+		insert.addCriteria(Criteria.where("userId").regex(moderatorToUpdate.getUserId()));
+		insert.addCriteria(Criteria.where("appId").regex(moderatorToUpdate.getAppId()));
+		ModeratorForApps newModeratorIstance=db.findOne(insert, ModeratorForApps.class);
+		if(newModeratorIstance==null){			
+			return null;
+		}else{
+			db.remove(newModeratorIstance);			
+		}
+		
+		db.save(moderatorToUpdate);
+		
+		return db.findOne(insert, ModeratorForApps.class);
+		
 		
 	}
 	

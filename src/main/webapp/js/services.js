@@ -6,7 +6,7 @@ app.controller('MainCtrl',
 	
 	
 			// The tab directive will use this data
-			$scope.tabs = [  'To Approve','KeyWord', 'Keyword Filter Log' ];
+			$scope.tabs = [  'To Approve','KeyWord', 'Keyword Filter Log','Moderator List for this app' ];
 			$scope.tabs.index = 0;
 			$scope.tabs.active = function() {
 				return $scope.tabs[$scope.tabs.index];
@@ -27,8 +27,11 @@ app.controller('MainCtrl',
 			}
 			$scope.keyList = [];
 			$scope.allkeyList = [];
-
+			$scope.moderators=[];
+			$scope.profiles=[];
+			$scope.possibleModerator="";
 			$scope.app ;
+			
 			
 
 			$scope.options = {
@@ -110,7 +113,33 @@ app.controller('MainCtrl',
 					// $scope.error = "No comments found";
 				});
 				
+				$http({
+					method : 'GET',
+					url : 'rest/moderator/app/' + $scope.app.appId + '/all',
+					params : {},
+					headers : {
+						Authorization : 'Bearer ' + $scope.app.appToken
+					}
+				}).success(function(data) {
+					$scope.moderators = data;
+					// $scope.info = 'Find latest comments inserted';
+					// $scope.error = '';
+				}).error(function(data) {
+					// $scope.info = '';
+					// $scope.error = "No comments found";
+				});
 				
+				$http({
+					method : 'GET',
+					url : 'http://localhost:8080/aac/basicprofile/all',				
+					headers : {
+						Authorization : 'Bearer ' + token
+					}
+				}).success(function(data) {
+					$scope.profiles=data.profiles;
+				}).error(function(data) {
+
+				});
 				
 
 			};
@@ -330,7 +359,13 @@ function keyController($scope, $http, $location, $cookieStore) {
 	}
 
 }
-
+function ModeratorsController($scope, $http, $location, $cookieStore) {
+	
+	$scope.addModerator=function(profile){
+		$scope.possibleModerator=profile;		
+	}
+	
+}
 
 
 angular.module('filters', []).filter('truncate', function() {
@@ -365,3 +400,10 @@ angular.module('filters', []).filter('truncate', function() {
 			return input;
 	}
 });
+
+app.value('$strapConfig', {
+	  datepicker: {
+	    language: 'fr',
+	    format: 'M d, yyyy'
+	  }
+	});

@@ -7,6 +7,7 @@ public class ModeratorForApps extends Moderator{
 	private String appId;
 	private String clientId;
 	private String parentUserId;
+	private String _id;
 
 	
 	public ModeratorForApps() {	
@@ -38,6 +39,14 @@ public class ModeratorForApps extends Moderator{
 	}
 	public void setParentUserId(String parentUserId) {
 		this.parentUserId = parentUserId;
+	}
+
+	public String get_id() {
+		return _id;
+	}
+
+	public void set_id(String _id) {
+		this._id = _id;
 	}
 
 
