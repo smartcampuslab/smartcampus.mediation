@@ -81,6 +81,9 @@
 	<resourceMapping method="GET"
 		pathPattern="/rest/moderator/app/{app}/all"
 	uri="moderator.users.{app}" />
+	
+	<resourceMapping method="DELETE"
+		pathPattern="/rest/moderator/app/{app}/{id}" uri="moderator.users.{app}" />
 
 </service>
 

@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.moderator.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,7 @@ import eu.trentorise.smartcampus.aac.AACService;
 import eu.trentorise.smartcampus.moderator.model.AppAndToken;
 import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
 import eu.trentorise.smartcampus.moderator.model.LogContentToModeratorService;
+import eu.trentorise.smartcampus.moderator.model.Moderator;
 import eu.trentorise.smartcampus.moderator.model.ModeratorForApps;
 import eu.trentorise.smartcampus.moderator.model.State;
 import eu.trentorise.smartcampus.moderator.utils.EasyTokenManger;
@@ -91,15 +93,19 @@ public class ModeratorForAppsController extends SCController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/moderator/app/{app}/add")
 	public @ResponseBody
-	void addModerator(HttpServletRequest request,@PathVariable String app,@RequestBody List<String> userIds) throws ProfileServiceException, AACException {
+	String addModerator(HttpServletRequest request,@PathVariable String app,@RequestBody List<HashMap> userIds) throws ProfileServiceException, AACException {
 		
 		///clean after test
-		BasicProfile ownerProfile=profileService.getBasicProfile("d795d89d-5de9-44ac-ab6a-1b9940e1dda8");
+		BasicProfile ownerProfile=profileService.getBasicProfile("99440746-db99-4951-b58d-bada7324753d");
 		
-		//load profiles like client core.moderator
+		//load profiles like client core.moderator	
+		long startTime=System.currentTimeMillis();
+		long endtime=startTime + Long.valueOf("2628000000");	
+		
+		
 		String token=new EasyTokenManger(aacURL, client_id, client_secret).getClientSmartCampusToken();
-		List<BasicProfile> listModerator=profileService.getBasicProfilesByUserId(userIds, token);
 		
+				
 		String clientIdOfApp="";
 		
 		List<ResourceParameter> lstResourceParameters=services.loadResourceParameterByUserId(ownerProfile.getUserId());
@@ -111,12 +117,16 @@ public class ModeratorForAppsController extends SCController {
 			}			
 		}
 				
-		long startTime=System.currentTimeMillis();
-		long endtime=startTime + Long.valueOf("2628000000");		
+			
 		
 		ModeratorForApps newModeratorIstance=null;
 		
-		for(BasicProfile index : listModerator){
+		for(int indexString = 0;indexString<userIds.size();indexString++){
+			String userId=String.valueOf(userIds.get(indexString).get("userId"));	
+			startTime=(Long) userIds.get(indexString).get("startTime");	
+			endtime=(Long) userIds.get(indexString).get("endTime");	
+			
+			BasicProfile index=profileService.getBasicProfile(userId, token);
 			Query insert=new Query();
 			insert.addCriteria(Criteria.where("userId").regex(index.getUserId()));
 			insert.addCriteria(Criteria.where("appId").regex(app));
@@ -134,6 +144,8 @@ public class ModeratorForAppsController extends SCController {
 			db.save(newModeratorIstance);
 			
 		}		
+		
+		return "{state:true}";
 		
 	}
 	
@@ -169,7 +181,18 @@ public class ModeratorForAppsController extends SCController {
 		
 		
 	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/moderator/app/{app}/{id}")
+	public @ResponseBody
+	String deleteModerator(HttpServletRequest request,@PathVariable String app,@PathVariable String id) throws SecurityException{
+
+		
+		db.remove(db.findById(id, ModeratorForApps.class));
 	
+		return "{state:true}";
+		
+		
+	}
 
 
 }

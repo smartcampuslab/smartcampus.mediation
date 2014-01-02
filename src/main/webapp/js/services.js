@@ -32,7 +32,9 @@ app.controller('MainCtrl',
 			$scope.possibleModerator="";
 			$scope.app ;
 			
-			
+			$scope.startDate=moment().calendar();;
+			$scope.endDate=moment().add('days', 30).calendar();;
+	
 
 			$scope.options = {
 				mstep : appsFromDb
@@ -360,9 +362,44 @@ function keyController($scope, $http, $location, $cookieStore) {
 
 }
 function ModeratorsController($scope, $http, $location, $cookieStore) {
+
 	
-	$scope.addModerator=function(profile){
+	$scope.loadModerator=function(profile){	
 		$scope.possibleModerator=profile;		
+		
+	}
+	$scope.addModerator=function(){	
+	
+		var moderators=new Array();
+		moderators[0]={"userId":$scope.possibleModerator.userId,"startTime":startDateModerator.unix()*1000,"endTime":endDateModerator.unix()*1000};
+		
+		$http({
+			method : 'POST',
+			url : 'rest/moderator/app/' + $scope.app.appId + '/add',
+			data:moderators,
+			headers : {
+				Authorization : 'Bearer ' + $scope.app.appToken
+			}
+		}).success(function(data) {
+			$scope.init();
+		}).error(function(data) {
+			$scope.init();
+
+		});
+	}
+	
+	$scope.deleteModerator =function(id){
+		$http({
+			method : 'DELETE',
+			url : 'rest/moderator/app/' + $scope.app.appId + '/'+id,			
+			headers : {
+				Authorization : 'Bearer ' + $scope.app.appToken
+			}
+		}).success(function(data) {
+			$scope.init();
+		}).error(function(data) {
+			$scope.init();
+		});
 	}
 	
 }
@@ -401,9 +438,4 @@ angular.module('filters', []).filter('truncate', function() {
 	}
 });
 
-app.value('$strapConfig', {
-	  datepicker: {
-	    language: 'fr',
-	    format: 'M d, yyyy'
-	  }
-	});
+

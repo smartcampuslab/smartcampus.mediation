@@ -26,6 +26,7 @@
 
 <script src="lib/jquery.min.js"></script>
 <script src="lib/angular.js"></script>
+
 <script src="lib/bootstrap.min.js"></script>
 <script src="lib/angular-strap.js"></script>
 <script src="js/services.js"></script>
@@ -37,13 +38,42 @@
 <script src="lib/prettify.js"></script>
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-cookies.min.js"></script>
-<script
-	src="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.js"></script>
+<script src="lib/moment.js"></script>
+<script type="text/javascript" src="lib/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="css/daterangepicker-bs3.css" />
+
 
 <script>
 var token="<%=request.getAttribute("token")%>";
 var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 var user_name="<%=request.getAttribute("user")%>";
+startDateModerator=moment().subtract('days', 29);
+endDateModerator=moment();
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() { 
+
+$('#reportrange').daterangepicker(
+    {
+      ranges: {
+         'Today': [moment(), moment()],
+         'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+         'Last 7 Days': [moment().subtract('days', 6), moment()],
+         'Last 30 Days': [moment().subtract('days', 29), moment()],
+         'This Month': [moment().startOf('month'), moment().endOf('month')],
+         'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+      },
+      startDate: moment().subtract('days', 29),
+      endDate: moment()
+    },
+    function(start, end) {
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        startDateModerator=start;
+        endDateModerator=end;
+    }
+);
+});
 </script>
 
 </head>
@@ -415,7 +445,7 @@ var user_name="<%=request.getAttribute("user")%>";
 											<td>{{mod.name}}</td>
 											<td>{{mod.surname}}</td>
 											<td><span> <a href=""
-													ng-click="change(keyword.keyword)"><i
+													ng-click="deleteModerator(mod._id)"><i
 														class="icon-fixed-width icon-remove"></i> </a></span></td>
 
 										</tr>
@@ -429,7 +459,7 @@ var user_name="<%=request.getAttribute("user")%>";
 							</div>
 							<div class="row-fluid">
 
-								<div class="span6" style="height: 350px; padding-right: 20px;">
+								<div class="span5" style="height: 350px; border-right: 1px solid #eeeeee; padding-right: 20px;text-align:left;margin-left:30px">
 									Profile in system <br /> <br />
 									<div>
 
@@ -442,7 +472,7 @@ var user_name="<%=request.getAttribute("user")%>";
 											<li style="list-style-type: none; text-decoration: none"
 												ng:repeat="profile in profiles | filter:f"><a href=""
 												style="text-decoration: none"
-												ng-click="addModerator(profile)"><i
+												ng-click="loadModerator(profile)"><i
 													class="icon-fixed-width icon-user"></i>
 													{{profile.name}},{{profile.surname}}</a></li>
 
@@ -450,10 +480,20 @@ var user_name="<%=request.getAttribute("user")%>";
 									</div>
 								</div>
 
-								<div class="span6"
-									style="height: 350px; padding-right: 20px; border-left: 1px solid #eeeeee;">
+								<div class="span5"
+									style="height: 350px; padding-right: 20px;text-align:left;margin-left:60px">
 
-									<label>Name: {{$scope.possibleModerator.name}}</label>
+									User: <span>{{possibleModerator.name}},{{possibleModerator.surname}}</span>
+									<br/>
+									Range:									
+									<div id="reportrange" class="pull-right">
+    <i class="icon-calendar icon-large"></i>
+    <span>{{startDate}} - {{endDate}}</span> <b class="caret"></b>
+</div>
+									<br/>
+									<br/>
+								    <button ng-click="addModerator()">Add Moderator</button>
+								    
 
 								</div>
 
