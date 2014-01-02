@@ -101,11 +101,13 @@ $('#reportrange').daterangepicker(
 						<p>
 							Application: <select style="width: 120px" ng-model="app"
 								ng-options="opt.appId for opt in options.mstep"
-								ng-change="init()"></select>
+								ng-change="init()"></select> 
 						</p>
-						<span class=" badge badge-warning" id="manualCount">messages</span>
-						<span class=" badge badge-info" id="keywordCount">15
-							followers</span>
+						<p>
+							Qualify:  <strong><span > {{qualify}}</span></strong>
+						</p>
+						<span class=" badge badge-warning" id="manualCount">manualCount</span>
+						<span class=" badge badge-info" id="keywordCount">keywordCount</span>
 					</div>
 				</div>
 			</div>
@@ -412,7 +414,7 @@ $('#reportrange').daterangepicker(
 
 				</div>
 
-				<div ng-show="tabs.active() == 'Moderator List for this app'">
+				<div ng-show="tabs.active() == 'Moderator List for this app' && app.owner == true">
 
 					<div ng-controller="ModeratorsController" class="container"
 						style="text-align: center; padding-top: 5%;">
@@ -482,19 +484,20 @@ $('#reportrange').daterangepicker(
 
 								<div class="span5"
 									style="height: 350px; padding-right: 20px;text-align:left;margin-left:60px">
-
-									User: <span>{{possibleModerator.name}},{{possibleModerator.surname}}</span>
+Add new moderator<br /> <br />
+	<div class="span12" style="height: 300px; overflow: auto;">
+									User: <strong><span>{{possibleModerator.name}},{{possibleModerator.surname}}</span></strong>
 									<br/>
 									Range:									
 									<div id="reportrange" class="pull-right">
     <i class="icon-calendar icon-large"></i>
-    <span>{{startDate}} - {{endDate}}</span> <b class="caret"></b>
+   <strong> <span>{{startDate}} - {{endDate}}</span> </strong><b class="caret"></b>
 </div>
 									<br/>
 									<br/>
 								    <button ng-click="addModerator()">Add Moderator</button>
 								    
-
+</div>
 								</div>
 
 

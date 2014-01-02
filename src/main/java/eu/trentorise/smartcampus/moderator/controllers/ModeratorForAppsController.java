@@ -145,7 +145,7 @@ public class ModeratorForAppsController extends SCController {
 			
 		}		
 		
-		return "{state:true}";
+		return "true";
 		
 	}
 	
@@ -189,7 +189,7 @@ public class ModeratorForAppsController extends SCController {
 		
 		db.remove(db.findById(id, ModeratorForApps.class));
 	
-		return "{state:true}";
+		return "true";
 		
 		
 	}

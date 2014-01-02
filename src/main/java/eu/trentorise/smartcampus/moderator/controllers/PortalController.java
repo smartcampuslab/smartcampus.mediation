@@ -194,11 +194,22 @@ public class PortalController extends SCController {
 			listAppToWeb.add(appAndToken);
 		}
 		
+		long now=System.currentTimeMillis();
+		
 		Query query2 = new Query();
-		query2.sort().on("endTime", Order.DESCENDING);
+		query2.addCriteria(Criteria.where("endTime").gt(now));
+		query2.addCriteria(Criteria.where("startTime").lt(now));
 		query2.addCriteria(Criteria.where("userId").regex(x.getUserId()));
 
 		List<ModeratorForApps> listModeratorForApps= db.find(query2, ModeratorForApps.class);
+		
+		for(ModeratorForApps rp : listModeratorForApps){
+			ClientDetails cd = services.loadClientByClientId(rp.getClientId());
+			String token=new EasyTokenManger(aacURL, rp.getClientId(), cd.getClientSecret()).getClientSmartCampusToken();
+			AppAndToken appAndToken=new AppAndToken(rp.getAppId(),token);
+			appAndToken.setOwner(false);
+			listAppToWeb.add(appAndToken);
+		}
 		
 		return JsonUtils.toJSON(listAppToWeb);
 	}

@@ -32,6 +32,7 @@ app.controller('MainCtrl',
 			$scope.possibleModerator="";
 			$scope.app ;
 			
+			
 			$scope.startDate=moment().calendar();;
 			$scope.endDate=moment().add('days', 30).calendar();;
 	
@@ -44,6 +45,7 @@ app.controller('MainCtrl',
 
 			$scope.init = function() {
 
+				$scope.qualify=($scope.app.owner)?"Owner":"Moderator";
 				
 			
 				$http({
@@ -152,6 +154,7 @@ app.controller('MainCtrl',
 			document.getElementById("developer").innerHTML=user_name;
 			document.getElementById("manualCount").innerHTML=$scope.remoteComment.length+" Manual Content";
 			document.getElementById("keywordCount").innerHTML=$scope.localComment.length+" KeyWord Content";
+			
 
 
 		});
