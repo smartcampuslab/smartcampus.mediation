@@ -5,14 +5,10 @@ import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 public class Moderator {
 	
 	private String userId;	
-	private long startTime;
-	private long endTime;
 	private String name;
 	private String surname;
 	
-	public Moderator(BasicProfile profile, long startTime2, long endtTime) {
-		this.endTime=endtTime;
-		this.startTime=startTime2;
+	public Moderator(BasicProfile profile) {
 		this.userId=profile.getUserId();
 		this.setName(profile.getName());
 		this.setSurname(profile.getSurname());
@@ -26,18 +22,7 @@ public class Moderator {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public long getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(long startTime) {
-		this.startTime = startTime;
-	}
-	public long getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(long endTime) {
-		this.endTime = endTime;
-	}
+	
 	public String getSurname() {
 		return surname;
 	}

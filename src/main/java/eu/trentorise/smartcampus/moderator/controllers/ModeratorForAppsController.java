@@ -84,17 +84,14 @@ public class ModeratorForAppsController extends SCController {
 		return fromCtx;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/moderator/app/{app}/add")
+	@RequestMapping(method = RequestMethod.POST, value = "/web/moderator/app/{app}/add")
 	public @ResponseBody
 	String addModerator(HttpServletRequest request,@PathVariable String app,@RequestBody List<HashMap> userIds) throws ProfileServiceException, AACException {
 		
 		///clean after test
-		BasicProfile ownerProfile=profileService.getBasicProfile("99440746-db99-4951-b58d-bada7324753d");
+		BasicProfile ownerProfile=profileService.getBasicProfile(getToken(request));
 		
-		//load profiles like client core.moderator	
-		long startTime=System.currentTimeMillis();
-		long endtime=startTime + Long.valueOf("2628000000");	
-		
+				
 		
 		String token=new EasyTokenManger(aacURL, client_id, client_secret).getClientSmartCampusToken();
 		
@@ -116,8 +113,7 @@ public class ModeratorForAppsController extends SCController {
 		
 		for(int indexString = 0;indexString<userIds.size();indexString++){
 			String userId=String.valueOf(userIds.get(indexString).get("userId"));	
-			startTime=(Long) userIds.get(indexString).get("startTime");	
-			endtime=(Long) userIds.get(indexString).get("endTime");	
+
 			
 			BasicProfile index=profileService.getBasicProfile(userId, token);
 			Query insert=new Query();
@@ -125,13 +121,11 @@ public class ModeratorForAppsController extends SCController {
 			insert.addCriteria(Criteria.where("appId").regex(app));
 			newModeratorIstance=db.findOne(insert, ModeratorForApps.class);
 			if(newModeratorIstance==null){			
-				newModeratorIstance=new ModeratorForApps(index,app,ownerProfile.getUserId(),startTime,endtime,clientIdOfApp);
+				newModeratorIstance=new ModeratorForApps(index,app,ownerProfile.getUserId(),clientIdOfApp);
 			}else{
 				db.remove(newModeratorIstance);
 				//if was moderator for this app,update the parent and the time
 				newModeratorIstance.setParentUserId(ownerProfile.getUserId());
-				newModeratorIstance.setStartTime(startTime);
-				newModeratorIstance.setEndTime(endtime);
 			}
 			
 			db.save(newModeratorIstance);
@@ -147,14 +141,16 @@ public class ModeratorForAppsController extends SCController {
 	List<ModeratorForApps> getAllModerator(HttpServletRequest request,@PathVariable String app) throws SecurityException{
 
 		Query query2 = new Query();
-		query2.sort().on("endTime", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("appId").regex(app));
+		
+		List<ModeratorForApps> list=db.find(query2, ModeratorForApps.class);
+		System.out.println(list.size());
 
-		return db.find(query2, ModeratorForApps.class);
+		return list;
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/moderator/app/{app}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/web/moderator/app/{app}")
 	public @ResponseBody
 	ModeratorForApps updateModerator(HttpServletRequest request,@PathVariable String app,@RequestBody ModeratorForApps moderatorToUpdate) throws SecurityException{
 
@@ -175,7 +171,7 @@ public class ModeratorForAppsController extends SCController {
 		
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/moderator/app/{app}/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/web/moderator/app/{app}/{id}")
 	public @ResponseBody
 	String deleteModerator(HttpServletRequest request,@PathVariable String app,@PathVariable String id) throws SecurityException{
 

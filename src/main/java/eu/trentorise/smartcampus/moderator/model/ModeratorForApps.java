@@ -14,8 +14,8 @@ public class ModeratorForApps extends Moderator{
 		super();
 	}
 	
-	public ModeratorForApps(BasicProfile user, String app,String parent, long startTime, long endtTime,String clientIdOfApp) {
-		super(user,startTime,endtTime);		
+	public ModeratorForApps(BasicProfile user, String app,String parent,String clientIdOfApp) {
+		super(user);		
 		this.appId=app;
 		this.parentUserId=parent;		
 		this.clientId=clientIdOfApp;

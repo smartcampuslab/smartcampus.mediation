@@ -195,7 +195,7 @@ public class PortalController extends SCController {
 			unicity.addCriteria(Criteria.where("appId").regex(rp.getValue()));
 			
 			if(db.find(unicity, ModeratorForApps.class).isEmpty()){
-				ModeratorForApps moderatorForApps=new ModeratorForApps(x, rp.getValue(), x.getUserId(), now, Long.MAX_VALUE, rp.getClientId());
+				ModeratorForApps moderatorForApps=new ModeratorForApps(x, rp.getValue(), x.getUserId(), rp.getClientId());
 				db.save(moderatorForApps);
 			}
 		}
@@ -203,8 +203,6 @@ public class PortalController extends SCController {
 		
 		
 		Query findModeratorAndOwner = new Query();
-		findModeratorAndOwner.addCriteria(Criteria.where("endTime").gt(now));
-		findModeratorAndOwner.addCriteria(Criteria.where("startTime").lt(now));
 		findModeratorAndOwner.addCriteria(Criteria.where("userId").regex(x.getUserId()));		
 	
 		List<ModeratorForApps> listModeratorForApps= db.find(findModeratorAndOwner, ModeratorForApps.class);

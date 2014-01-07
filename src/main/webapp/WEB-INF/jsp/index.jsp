@@ -16,9 +16,7 @@
 	href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css"
 	rel="stylesheet">
 
-<link
-	href="http://mgcrea.github.io/angular-strap/vendor/bootstrap-datepicker.css"
-	rel="stylesheet">
+
 
 
 
@@ -39,42 +37,18 @@
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-cookies.min.js"></script>
 <script src="lib/moment.js"></script>
-<script type="text/javascript" src="lib/daterangepicker.js"></script>
-<link rel="stylesheet" type="text/css" href="css/daterangepicker-bs3.css" />
+
 
 
 <script>
 var token="<%=request.getAttribute("token")%>";
 var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 var user_name="<%=request.getAttribute("user")%>";
-startDateModerator=moment().subtract('days', 29);
-endDateModerator=moment();
+
+
 </script>
 
-<script type="text/javascript">
-$(document).ready(function() { 
 
-$('#reportrange').daterangepicker(
-    {
-      ranges: {
-         'Today': [moment(), moment()],
-         'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-         'Last 7 Days': [moment().subtract('days', 6), moment()],
-         'Last 30 Days': [moment().subtract('days', 29), moment()],
-         'This Month': [moment().startOf('month'), moment().endOf('month')],
-         'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-      },
-      startDate: moment().subtract('days', 29),
-      endDate: moment()
-    },
-    function(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        startDateModerator=start;
-        endDateModerator=end;
-    }
-);
-});
-</script>
 
 </head>
 
@@ -421,47 +395,10 @@ $('#reportrange').daterangepicker(
 						<div class="row-fluid">
 
 
-							<div class="span12" style="min-height: 100px;">
-
-
-
-								<table class="table table-striped table-bordered">
-									<thead>
-										<tr>
-
-											<th>Start date</th>
-											<th>End Date</th>
-											<th>Name</th>
-											<th>Surname</th>
-											<th>Manage</th>
-
-
-
-										</tr>
-									</thead>
-									<tbody class="animate-repeat" ng-repeat="mod in moderators">
-										<tr>
-
-											<td>{{mod.startTime | dateformat}}</td>
-											<td>{{mod.endTime | dateformat}}</td>
-											<td>{{mod.name}}</td>
-											<td>{{mod.surname}}</td>
-											<td><span ng-if="isOwner(mod)"> <a href=""
-													ng-click="deleteModerator(mod._id)"><i
-														class="icon-fixed-width icon-remove"></i></a></span></td>
-
-										</tr>
-
-
-
-
-									</tbody>
-								</table>
-
-							</div>
+							
 							<div class="row-fluid">
 
-								<div class="span5" style="height: 350px; border-right: 1px solid #eeeeee; padding-right: 20px;text-align:left;margin-left:30px">
+								<div class="span4" style="height: 350px; border-right: 1px solid #eeeeee; padding-right: 20px;text-align:left;">
 									Profile in system <br /> <br />
 									<div>
 
@@ -482,23 +419,57 @@ $('#reportrange').daterangepicker(
 									</div>
 								</div>
 
-								<div class="span5"
-									style="height: 350px; padding-right: 20px;text-align:left;margin-left:60px">
+								<div class="span4"
+									style="height: 350px; padding-right: 20px;text-align:left;">
 Add new moderator<br /> <br />
 	<div class="span12" style="height: 300px; overflow: auto;">
-									User: <strong><span>{{possibleModerator.name}},{{possibleModerator.surname}}</span></strong>
+									User: <strong><span>{{possibleModerator.name}}  {{possibleModerator.surname}}</span></strong>
 									<br/>
-									Range:									
-									<div id="reportrange" class="pull-right">
-    <i class="icon-calendar icon-large"></i>
-   <strong> <span>{{startDate}} - {{endDate}}</span> </strong><b class="caret"></b>
-</div>
+								
 									<br/>
 									<br/>
 								    <button ng-click="addModerator()">Add Moderator</button>
 								    
 </div>
 								</div>
+								
+								<div class="span4" style="min-height: 100px;text-align:left;">
+
+Active moderator<br /> <br />
+
+
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr>
+
+										
+											<th>Name</th>
+											<th>Surname</th>
+											<th>Manage</th>
+
+
+
+										</tr>
+									</thead>
+									<tbody class="animate-repeat" ng-repeat="mod in moderators">
+										<tr>
+
+										
+											<td>{{mod.name}}</td>
+											<td>{{mod.surname}}</td>
+											<td><span ng-if="isOwner(mod)"> <a href=""
+													ng-click="deleteModerator(mod._id)"><i
+														class="icon-fixed-width icon-remove"></i></a></span></td>
+
+										</tr>
+
+
+
+
+									</tbody>
+								</table>
+
+							</div>
 
 
 

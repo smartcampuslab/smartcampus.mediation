@@ -129,6 +129,7 @@ app.controller('MainCtrl',
 					// $scope.info = 'Find latest comments inserted';
 					// $scope.error = '';
 				}).error(function(data) {
+					$scope.moderators = [];
 					// $scope.info = '';
 					// $scope.error = "No comments found";
 				});
@@ -374,11 +375,11 @@ function ModeratorsController($scope, $http, $location, $cookieStore) {
 	$scope.addModerator=function(){	
 	
 		var moderators=new Array();
-		moderators[0]={"userId":$scope.possibleModerator.userId,"startTime":startDateModerator.unix()*1000,"endTime":endDateModerator.unix()*1000};
+		moderators[0]={"userId":$scope.possibleModerator.user};
 		
 		$http({
 			method : 'POST',
-			url : 'rest/moderator/app/' + $scope.app.appId + '/add',
+			url : 'web/moderator/app/' + $scope.app.appId + '/add',
 			data:moderators,
 			headers : {
 				Authorization : 'Bearer ' + $scope.app.appToken
@@ -386,6 +387,7 @@ function ModeratorsController($scope, $http, $location, $cookieStore) {
 		}).success(function(data) {
 			$scope.init();
 		}).error(function(data) {
+			alert("Moderator added to "+$scope.app.appId);
 			$scope.init();
 
 		});
@@ -394,7 +396,7 @@ function ModeratorsController($scope, $http, $location, $cookieStore) {
 	$scope.deleteModerator =function(id){
 		$http({
 			method : 'DELETE',
-			url : 'rest/moderator/app/' + $scope.app.appId + '/'+id,			
+			url : 'web/moderator/app/' + $scope.app.appId + '/'+id,			
 			headers : {
 				Authorization : 'Bearer ' + $scope.app.appToken
 			}
