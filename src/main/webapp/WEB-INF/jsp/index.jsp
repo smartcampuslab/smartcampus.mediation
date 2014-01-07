@@ -81,7 +81,7 @@ var user_name="<%=request.getAttribute("user")%>";
 						<span class=" badge badge-warning" id="manualCount">manualCount</span>
 						<span class=" badge badge-info" id="keywordCount">keywordCount</span>
 						<p style="margin-top: 10px;">
-						<button type="button" class="btn btn-success " ng-disabled="app==undefined" ng-click="reload();"><i class="fa fa-refresh"></i>  Update </button>
+						<button type="button" class="btn btn-success " ng-disabled="app==undefined" ng-click="reload();"><i class="fa fa-refresh"></i>  Refresh</button>
 						</p>
 					</div>
 				</div>
