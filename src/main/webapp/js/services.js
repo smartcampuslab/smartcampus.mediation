@@ -439,6 +439,10 @@ angular.module('filters', []).filter('truncate', function() {
 		else
 			return input;
 	}
+}).filter('isOwner', function() {
+	return function(input) {		
+		return(input.userId==input.parentUserId);			
+	}
 });
 
 

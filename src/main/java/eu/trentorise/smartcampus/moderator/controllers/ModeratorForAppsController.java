@@ -1,6 +1,5 @@
 package eu.trentorise.smartcampus.moderator.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,12 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.aac.AACException;
 import eu.trentorise.smartcampus.aac.AACService;
-import eu.trentorise.smartcampus.moderator.model.AppAndToken;
-import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
-import eu.trentorise.smartcampus.moderator.model.LogContentToModeratorService;
-import eu.trentorise.smartcampus.moderator.model.Moderator;
 import eu.trentorise.smartcampus.moderator.model.ModeratorForApps;
-import eu.trentorise.smartcampus.moderator.model.State;
 import eu.trentorise.smartcampus.moderator.utils.EasyTokenManger;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
 import eu.trentorise.smartcampus.profileservice.ProfileServiceException;

@@ -446,9 +446,9 @@ $('#reportrange').daterangepicker(
 											<td>{{mod.endTime | dateformat}}</td>
 											<td>{{mod.name}}</td>
 											<td>{{mod.surname}}</td>
-											<td><span> <a href=""
+											<td><span ng-if="isOwner(mod)"> <a href=""
 													ng-click="deleteModerator(mod._id)"><i
-														class="icon-fixed-width icon-remove"></i> </a></span></td>
+														class="icon-fixed-width icon-remove"></i></a></span></td>
 
 										</tr>
 
