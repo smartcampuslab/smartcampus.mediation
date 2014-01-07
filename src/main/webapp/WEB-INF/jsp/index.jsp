@@ -63,10 +63,8 @@ var user_name="<%=request.getAttribute("user")%>";
 			<div class="span6 "></div>
 			<div class="span4 well">
 				<div class="row">
-					<div class="span1">
-						<a href="http://critterapp.pagodabox.com/others/admin"
-							class="thumbnail"><img
-							src="http://critterapp.pagodabox.com/img/user.jpg" alt=""></a>
+					<div class="span1" style="text-align:center"><i class="fa fa-user fa-5x"></i>
+					
 					</div>
 					<div class="span3">
 						<p>
@@ -82,6 +80,9 @@ var user_name="<%=request.getAttribute("user")%>";
 						</p>
 						<span class=" badge badge-warning" id="manualCount">manualCount</span>
 						<span class=" badge badge-info" id="keywordCount">keywordCount</span>
+						<p style="margin-top: 10px;">
+						<button type="button" class="btn btn-success " ng-disabled="app==undefined" ng-click="reload();"><i class="fa fa-refresh"></i>  Update </button>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -457,7 +458,7 @@ Active moderator<br /> <br />
 										
 											<td>{{mod.name}}</td>
 											<td>{{mod.surname}}</td>
-											<td><span ng-if="isOwner(mod)"> <a href=""
+											<td><span ng-if="isOwner(mod)"> <a href="" ng-show="!app.owner"
 													ng-click="deleteModerator(mod._id)"><i
 														class="icon-fixed-width icon-remove"></i></a></span></td>
 
