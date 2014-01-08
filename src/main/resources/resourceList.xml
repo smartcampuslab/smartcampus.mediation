@@ -74,16 +74,7 @@
 		pathPattern="/rest/content/from/{fromdata}/to/{todata}/{app}"
 	uri="moderator.content.manual.{app}" />
 	
-	<resourceMapping method="POST"
-		pathPattern="/rest/moderator/app/{app}/add"
-	uri="moderator.users.{app}" />
 	
-	<resourceMapping method="GET"
-		pathPattern="/rest/moderator/app/{app}/all"
-	uri="moderator.users.{app}" />
-	
-	<resourceMapping method="DELETE"
-		pathPattern="/rest/moderator/app/{app}/{id}" uri="moderator.users.{app}" />
 
 </service>
 

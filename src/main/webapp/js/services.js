@@ -118,7 +118,7 @@ app.controller('MainCtrl',
 				
 				$http({
 					method : 'GET',
-					url : 'rest/moderator/app/' + $scope.app.appId + '/all',
+					url : 'web/moderator/app/' + $scope.app.appId + '/all',
 					params : {},
 					headers : {
 						Authorization : 'Bearer ' + $scope.app.appToken
