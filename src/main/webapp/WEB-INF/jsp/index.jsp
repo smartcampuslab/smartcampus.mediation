@@ -429,7 +429,7 @@ Add new moderator<br /> <br />
 								
 									<br/>
 									<br/>
-								    <button ng-click="addModerator()">Add Moderator</button>
+								    <button ng-click="addModerator(possibleModerator)">Add Moderator</button>
 								    
 </div>
 								</div>

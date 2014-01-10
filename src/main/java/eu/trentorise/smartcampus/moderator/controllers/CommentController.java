@@ -15,6 +15,8 @@
  */
 package eu.trentorise.smartcampus.moderator.controllers;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
 import eu.trentorise.smartcampus.moderator.model.LogContentToModeratorService;
+import eu.trentorise.smartcampus.moderator.model.MessageToMediationService;
 import eu.trentorise.smartcampus.moderator.model.State;
 
 @Controller
@@ -183,6 +186,23 @@ public class CommentController {
 		db.save(deletedmessage);
 		db.remove(toDelete);
 		
+
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/web/massive/import")
+	public @ResponseBody
+	void massive_import(HttpServletRequest request,@RequestBody ArrayList<LinkedHashMap<String,Object>> messages) {
+		
+		for(LinkedHashMap<String,Object> index:messages){
+			//{"_id":"52ce5c9d975a22c092435ca4","parseApproved":true,"mediationApproved":"NOT_REQUEST","timestamp":1389255837563,"webappname":"ifame","entityId":167,"entityTesto":"Davvero buona","note":"null","userid":"232"}
+			ContentToModeratorService newIndex= new ContentToModeratorService( String.valueOf(index.get("webappname")), String.valueOf(index.get("entityId")),  String.valueOf(index.get("entityTesto")), index.get("userid").toString());
+			newIndex.setTimestamp(Long.valueOf(index.get("timestamp").toString()));
+			newIndex.setKeywordApproved(Boolean.valueOf(index.get("parseApproved").toString()));
+			newIndex.setManualApproved(State.valueOf(index.get("mediationApproved").toString()));
+			newIndex.setNote(index.get("note").toString());
+			db.save(newIndex);
+		
+		}
 
 	}
 }

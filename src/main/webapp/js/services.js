@@ -118,7 +118,7 @@ app.controller('MainCtrl',
 				
 				$http({
 					method : 'GET',
-					url : 'web/moderator/app/' + $scope.app.appId + '/all',
+					url : 'rest/moderator/app/' + $scope.app.appId + '/all',
 					params : {},
 					headers : {
 						Authorization : 'Bearer ' + $scope.app.appToken
@@ -376,7 +376,7 @@ function ModeratorsController($scope, $http, $location, $cookieStore) {
 	$scope.addModerator=function(){	
 	
 		var moderators=new Array();
-		moderators[0]={"userId":$scope.possibleModerator.user};
+		moderators[0]={"userId":$scope.possibleModerator.userId};
 		
 		$http({
 			method : 'POST',

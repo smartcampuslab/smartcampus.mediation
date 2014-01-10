@@ -74,7 +74,9 @@
 		pathPattern="/rest/content/from/{fromdata}/to/{todata}/{app}"
 	uri="moderator.content.manual.{app}" />
 	
-	
+	<resourceMapping method="GET"
+		pathPattern="/rest/moderator/app/{app}/all"
+	uri="moderator.content.manual.{app}" />
 
 </service>
 
