@@ -136,7 +136,7 @@ public class ModeratorForAppsController extends SCController {
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/moderator/app/{app}/all")
+	@RequestMapping(method = RequestMethod.GET, value = "/web/moderator/app/{app}/all")
 	public @ResponseBody
 	List<ModeratorForApps> getAllModerator(HttpServletRequest request,@PathVariable String app) throws SecurityException{
 

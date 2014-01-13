@@ -118,13 +118,16 @@ app.controller('MainCtrl',
 				
 				$http({
 					method : 'GET',
-					url : 'rest/moderator/app/' + $scope.app.appId + '/all',
+					url : 'web/moderator/app/' + $scope.app.appId + '/all',
 					params : {},
 					headers : {
 						Authorization : 'Bearer ' + $scope.app.appToken
 					}
-				}).success(function(data) {
+				}).success(function(data, status, headers, config) {
+					console.log(status);
+					if(status==200){
 					$scope.moderators = data;
+					}else{$scope.init();}
 					// $scope.info = 'Find latest comments inserted';
 					// $scope.error = '';
 				}).error(function(data) {

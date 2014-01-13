@@ -52,7 +52,7 @@
 	</http> -->
 	
 	 
-	<sec:http pattern="/web/**" disable-url-rewriting="true" auto-config="false" authentication-manager-ref="resourceAuthenticationManager">
+	<sec:http create-session='always' pattern="/web/**" disable-url-rewriting="true" auto-config="false" authentication-manager-ref="resourceAuthenticationManager">
 		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
 		<sec:form-login login-page="/login" />
 		<sec:logout invalidate-session="true" logout-url="/logout"
