@@ -138,7 +138,7 @@ app.controller('MainCtrl',
 				
 				$http({
 					method : 'GET',
-					url : 'http://localhost:8080/aac/basicprofile/all',				
+					url : "https://"+window.location.hostname+'/aac/basicprofile/all',				
 					headers : {
 						Authorization : 'Bearer ' + token
 					}
