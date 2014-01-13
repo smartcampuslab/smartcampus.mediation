@@ -53,6 +53,7 @@
 	
 	 
 	<sec:http create-session='always' pattern="/web/**" disable-url-rewriting="true" auto-config="false" authentication-manager-ref="resourceAuthenticationManager">
+		
 		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
 		<sec:form-login login-page="/login" />
 		<sec:logout invalidate-session="true" logout-url="/logout"
@@ -60,6 +61,7 @@
 			logout-success-url="/logout" />
 	</sec:http>
 	
+    
 	
 	
 	<sec:http pattern="/rest/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
@@ -114,6 +116,10 @@
 		<property name="tokenStore" ref="tokenStore" />
 		<property name="authServices" ref="authServices" />
 	</bean>
+	
+	<bean id="httpSessionRequestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache"> 
+    <property name="createSessionAllowed" value="false" /> 
+</bean>
 	
 	<sec:authentication-manager alias="authenticationManager">
 		<sec:authentication-provider ref="preauthAuthProvider" />

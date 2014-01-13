@@ -123,13 +123,13 @@ app.controller('MainCtrl',
 					headers : {
 						Authorization : 'Bearer ' + $scope.app.appToken
 					}
-				}).success(function(data, status, headers, config) {
-					console.log(status);
-					if(status==200){
-					$scope.moderators = data;
-					}else{$scope.init();}
-					// $scope.info = 'Find latest comments inserted';
-					// $scope.error = '';
+				}).success(function(data, status, headers, config) {					
+					if( Object.prototype.toString.call( data ) === '[object Array]' ) {
+						$scope.moderators = data;
+					}else{
+						$scope.init();
+					}
+					
 				}).error(function(data) {
 					$scope.moderators = [];
 					// $scope.info = '';
