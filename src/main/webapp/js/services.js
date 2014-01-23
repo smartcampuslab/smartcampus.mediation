@@ -326,7 +326,7 @@ function keyController($scope, $http, $location, $cookieStore) {
 
 	$scope.change = function(key) {
 		$http({
-			method : 'PUT',
+			method : 'POST',
 			url : 'rest/key/' + $scope.app.appId,
 			data : key,
 			headers : {

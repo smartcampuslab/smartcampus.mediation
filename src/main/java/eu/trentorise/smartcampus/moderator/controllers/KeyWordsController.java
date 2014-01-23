@@ -86,7 +86,7 @@ public class KeyWordsController {
 		return db.find(query2, KeyWord.class);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/key/{app}")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/key/{app}")
 	public @ResponseBody
 	boolean deleteKey(HttpServletRequest request, @RequestBody String key,
 			@PathVariable String app) {
