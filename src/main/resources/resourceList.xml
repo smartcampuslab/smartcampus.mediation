@@ -74,14 +74,21 @@
 		pathPattern="/rest/content/from/{fromdata}/to/{todata}/{app}"
 	uri="moderator.content.manual.{app}" />
 	
-		<resourceMapping method="POST"
+<resourceMapping method="POST"
 		pathPattern="/rest/key/{app}"
 	uri="moderator.content.manual.{app}" />
+		
+	<resourceMapping method="GET"
+		pathPattern="/rest/comment/local/{app}/all"
+	uri="moderator.content.keyword.{app}" />
 	
-<!-- 	<resourceMapping method="GET" -->
-<!-- 		pathPattern="/rest/moderator/app/{app}/all" -->
-<!-- 	uri="moderator.content.manual.{app}" /> -->
+ 	<resourceMapping method="GET" 
+		pathPattern="/rest/moderator/app/{app}/all"
+	uri="moderator.content.manual.{app}" />
 
+		<resourceMapping method="POST"
+		pathPattern="/rest/key/{app}/all"
+	uri="moderator.content.manual.{app}" /> 
 </service>
 
 

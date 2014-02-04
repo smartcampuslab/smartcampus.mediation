@@ -45,6 +45,12 @@ public class CommentController {
 	@Autowired
 	MongoTemplate db;
 
+	/**
+	 * 
+	 * @param request
+	 * @param app
+	 * @return true if the comment is saved correctly.
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/app/{app}/add")
 	public @ResponseBody
 	boolean addCommento(HttpServletRequest request,
@@ -64,6 +70,12 @@ public class CommentController {
 		return db.findOne(query2, ContentToModeratorService.class) != null;
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param app
+	 * @return all comments with state of approvation NOT_REQUEST of an app
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/local/{app}/all")
 	public @ResponseBody
 	List<ContentToModeratorService> getCommentoPA(HttpServletRequest request,
@@ -78,6 +90,12 @@ public class CommentController {
 		return db.find(query2, ContentToModeratorService.class);
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param app
+	 * @return all comments with state of approvation is different to NOT_REQUEST of an app
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/remote/{app}/all")
 	public @ResponseBody
 	List<ContentToModeratorService> getCommentoMA(HttpServletRequest request,
@@ -92,6 +110,7 @@ public class CommentController {
 		return db.find(query2, ContentToModeratorService.class);
 	}
 
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/app/{app}/note/add")
 	public @ResponseBody
 	boolean addNote(HttpServletRequest request, @PathVariable String _id,
@@ -110,6 +129,12 @@ public class CommentController {
 
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param app
+	 * @return true if the state of the comment is changed correctly.
+	 */
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/comment/{_id}/app/{app}/mediationapproved/change/{stato}")
 	public @ResponseBody
 	boolean changeMediationApproved(HttpServletRequest request,
@@ -131,6 +156,12 @@ public class CommentController {
 
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param app
+	 * @return all comments greater than a date or equal, of an app
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/data/{data}/{app}")
 	public @ResponseBody
 	List<ContentToModeratorService> exportComment(HttpServletRequest request,
