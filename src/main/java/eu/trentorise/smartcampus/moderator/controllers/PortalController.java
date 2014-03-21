@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -170,6 +171,8 @@ public class PortalController extends SCController {
 
 	protected AACService aacService;
 	protected BasicProfileService profileService;
+	private static final Logger logger = Logger
+			.getLogger(PortalController.class);
 
 	@PostConstruct
 	public void init() {
@@ -208,7 +211,16 @@ public class PortalController extends SCController {
 		List<ModeratorForApps> listModeratorForApps= db.find(findModeratorAndOwner, ModeratorForApps.class);
 		
 		for(ModeratorForApps rp : listModeratorForApps){
-			ClientDetails cd = services.loadClientByClientId(rp.getClientId());
+			
+			ClientDetails cd = null;
+			
+			try{
+				cd = services.loadClientByClientId(rp.getClientId());
+			}catch (Exception e) {
+				// TODO: handle exception
+				logger.warn("Warning: No client with requested id"+rp.getClientId());
+				continue;
+			}
 			String token=new EasyTokenManger(aacURL, rp.getClientId(), cd.getClientSecret()).getClientSmartCampusToken();
 			AppAndToken appAndToken=new AppAndToken(rp.getAppId(),token);
 			if(rp.getParentUserId().compareTo(rp.getUserId())!=0){
