@@ -75,32 +75,17 @@ public class PortalController extends SCController {
 	@Autowired
 	private AuthServices services;
 
-	// //
-	// // @RequestMapping(method = RequestMethod.GET, value = "/")
-	// // public String index(HttpServletRequest request) {
-	// //
-	// // return "web/index";
-	// // }
-	//
-	// @RequestMapping(method = RequestMethod.GET, value = "/web")
-	// public String web(HttpServletRequest request) {
-	//
-	// return "index";
-	// }
-	//
-	// @RequestMapping(method = RequestMethod.GET, value = "/web/login")
-	// public String login(HttpServletRequest request) {
-	//
-	// return "index";
-	// }
-	//
-	// @RequestMapping(method = RequestMethod.GET, value = "/exit")
-	// public String exit(HttpServletRequest request) {
-	//
-	// return "exit";
-	// }
-	//
+	protected AACService aacService;
+	protected BasicProfileService profileService;
+	
+	private static final Logger logger = Logger.getLogger(PortalController.class);
 
+	@PostConstruct
+	public void init() {
+		aacService = new AACService(aacExtURL, client_id, client_secret);
+		profileService = new BasicProfileService(aacURL);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public ModelAndView web(HttpServletRequest request) {
 
@@ -165,45 +150,29 @@ public class PortalController extends SCController {
 		// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String fromCtx = (String) request.getSession().getAttribute("token");
 
-		System.err.println("TOKEN: " + fromCtx);
 		return fromCtx;
 	}
 
-	protected AACService aacService;
-	protected BasicProfileService profileService;
-	private static final Logger logger = Logger
-			.getLogger(PortalController.class);
-
-	@PostConstruct
-	public void init() {
-		aacService = new AACService(aacExtURL, client_id, client_secret);
-		profileService = new BasicProfileService(aacURL);
-	}
-	
-	
 	private String getApps(HttpServletRequest request) throws SecurityException, ProfileServiceException, AACException{
 		BasicProfile x=profileService.getBasicProfile(getToken(request));
 		List<ResourceParameter> lstResourceParameters=services.loadResourceParameterByUserId(x.getUserId());
-		
-		long now=System.currentTimeMillis();
 		
 		List<AppAndToken> listAppToWeb=new ArrayList<AppAndToken>();
 		
 		for(ResourceParameter rp : lstResourceParameters){
 			if (!MODERATOR_SERVICE_ID.equals(rp.getServiceId()) && !MODERATOR_RESOURCE_PARAMETER_ID.equals(rp.getResourceId())) continue;
 			
-			Query unicity=new Query();
-			unicity.addCriteria(Criteria.where("parentUserId").regex(x.getUserId()));
-			unicity.addCriteria(Criteria.where("userId").regex(x.getUserId()));
-			unicity.addCriteria(Criteria.where("appId").regex(rp.getValue()));
 			
-			if(db.find(unicity, ModeratorForApps.class).isEmpty()){
+			Query q = Query.query(Criteria
+					.where("parentUserId").is(x.getUserId())
+					.and("userId").is(x.getUserId())
+					.and("appId").is(rp.getValue()));
+			
+			if(db.find(q, ModeratorForApps.class).isEmpty()){
 				ModeratorForApps moderatorForApps=new ModeratorForApps(x, rp.getValue(), x.getUserId(), rp.getClientId());
 				db.save(moderatorForApps);
 			}
 		}
-		
-		
 		
 		Query findModeratorAndOwner = new Query();
 		findModeratorAndOwner.addCriteria(Criteria.where("userId").regex(x.getUserId()));		
@@ -217,8 +186,10 @@ public class PortalController extends SCController {
 			try{
 				cd = services.loadClientByClientId(rp.getClientId());
 			}catch (Exception e) {
-				// TODO: handle exception
-				logger.warn("Warning: No client with requested id"+rp.getClientId());
+				logger.warn("Warning: No client with requested id: "+rp.getClientId());
+				db.remove(Query.query(Criteria
+						.where("userId").is(x.getUserId())
+						.and("clientId").is(rp.getClientId())));
 				continue;
 			}
 			String token=new EasyTokenManger(aacURL, rp.getClientId(), cd.getClientSecret()).getClientSmartCampusToken();

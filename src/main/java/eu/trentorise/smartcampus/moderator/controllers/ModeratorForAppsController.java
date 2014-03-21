@@ -80,7 +80,6 @@ public class ModeratorForAppsController extends SCController {
 		// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String fromCtx = (String) request.getSession().getAttribute("token");
 
-		System.err.println("TOKEN: " + fromCtx);
 		return fromCtx;
 	}
 	
