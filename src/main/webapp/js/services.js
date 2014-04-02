@@ -138,14 +138,10 @@ app.controller('MainCtrl',
 				
 				$http({
 					method : 'GET',
-					url : "https://"+window.location.hostname+'/aac/basicprofile/all',				
-					headers : {
-						Authorization : 'Bearer ' + token
-					}
+					url : 'profiles'
 				}).success(function(data) {
-					$scope.profiles=data.profiles;
+					$scope.profiles=data;
 				}).error(function(data) {
-
 				});
 				
 
@@ -395,7 +391,7 @@ function ModeratorsController($scope, $http, $location, $cookieStore) {
 			$scope.init();
 
 		});
-	}
+	};
 	
 	$scope.deleteModerator =function(id){
 		$http({
@@ -409,7 +405,11 @@ function ModeratorsController($scope, $http, $location, $cookieStore) {
 		}).error(function(data) {
 			$scope.init();
 		});
-	}
+	};
+	
+	$scope.notOwner = function(input) {
+		return(input.userId!=input.parentUserId);			
+	};
 	
 }
 
@@ -444,10 +444,6 @@ angular.module('filters', []).filter('truncate', function() {
 			return "";
 		else
 			return input;
-	}
-}).filter('isOwner', function() {
-	return function(input) {		
-		return(input.userId==input.parentUserId);			
 	}
 });
 

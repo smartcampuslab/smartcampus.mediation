@@ -86,43 +86,31 @@ public class ModeratorForAppsController extends SCController {
 	@RequestMapping(method = RequestMethod.POST, value = "/web/moderator/app/{app}/add")
 	public @ResponseBody
 	String addModerator(HttpServletRequest request,@PathVariable String app,@RequestBody List<HashMap> userIds) throws ProfileServiceException, AACException {
+		BasicProfile ownerProfile = profileService.getBasicProfile(getToken(request));
 		
-		///clean after test
-		BasicProfile ownerProfile=profileService.getBasicProfile(getToken(request));
-		
+		String clientToken=new EasyTokenManger(aacURL, client_id, client_secret).getClientSmartCampusToken();
 				
-		
-		String token=new EasyTokenManger(aacURL, client_id, client_secret).getClientSmartCampusToken();
-		
-				
-		String clientIdOfApp="";
+		String clientIdOfApp = "";
 		
 		List<ResourceParameter> lstResourceParameters=services.loadResourceParameterByUserId(ownerProfile.getUserId());
 		for(ResourceParameter rp : lstResourceParameters){
 			if (!MODERATOR_SERVICE_ID.equals(rp.getServiceId()) && !MODERATOR_RESOURCE_PARAMETER_ID.equals(rp.getResourceId())) continue;
 			if(rp.getValue().compareTo(app)==0){
-				clientIdOfApp=rp.getClientId();
+				clientIdOfApp = rp.getClientId();
 				break;
 			}			
 		}
-				
-			
 		
 		ModeratorForApps newModeratorIstance=null;
 		if(!userIds.isEmpty())
-		for(int indexString = 0;indexString<userIds.size();indexString++){
-			String userId=String.valueOf(userIds.get(indexString).get("userId"));	
-
-			
-			BasicProfile index=profileService.getBasicProfile(userId, token);
-			Query insert=new Query();
-			insert.addCriteria(Criteria.where("userId").regex(index.getUserId()));
-			insert.addCriteria(Criteria.where("appId").regex(app));
+		for(int i = 0;i<userIds.size();i++){
+			String userId=String.valueOf(userIds.get(i).get("userId"));
+			Query insert=Query.query(Criteria.where("userId").is(userId).and("appId").is(app));
 			newModeratorIstance=db.findOne(insert, ModeratorForApps.class);
 			if(newModeratorIstance==null){			
-				newModeratorIstance=new ModeratorForApps(index,app,ownerProfile.getUserId(),clientIdOfApp);
+				BasicProfile profileToAdd = profileService.getBasicProfile(userId, clientToken);
+				newModeratorIstance=new ModeratorForApps(profileToAdd, app, ownerProfile.getUserId(), clientIdOfApp);
 			}else{
-				db.remove(newModeratorIstance);
 				//if was moderator for this app,update the parent and the time
 				newModeratorIstance.setParentUserId(ownerProfile.getUserId());
 			}
@@ -140,7 +128,7 @@ public class ModeratorForAppsController extends SCController {
 	List<ModeratorForApps> getAllModerator(HttpServletRequest request,@PathVariable String app) throws SecurityException{
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("appId").regex(app));
+		query2.addCriteria(Criteria.where("appId").is(app));
 		
 		List<ModeratorForApps> list=db.find(query2, ModeratorForApps.class);
 		System.out.println(list.size());
@@ -154,8 +142,8 @@ public class ModeratorForAppsController extends SCController {
 	ModeratorForApps updateModerator(HttpServletRequest request,@PathVariable String app,@RequestBody ModeratorForApps moderatorToUpdate) throws SecurityException{
 
 		Query insert=new Query();
-		insert.addCriteria(Criteria.where("userId").regex(moderatorToUpdate.getUserId()));
-		insert.addCriteria(Criteria.where("appId").regex(moderatorToUpdate.getAppId()));
+		insert.addCriteria(Criteria.where("userId").is(moderatorToUpdate.getUserId()));
+		insert.addCriteria(Criteria.where("appId").is(moderatorToUpdate.getAppId()));
 		ModeratorForApps newModeratorIstance=db.findOne(insert, ModeratorForApps.class);
 		if(newModeratorIstance==null){			
 			return null;

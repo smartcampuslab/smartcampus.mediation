@@ -46,7 +46,6 @@ var token="<%=request.getAttribute("token")%>";
 var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 var user_name="<%=request.getAttribute("user")%>";
 
-
 </script>
 
 
@@ -134,7 +133,7 @@ var user_name="<%=request.getAttribute("user")%>";
 							<table class="table table-striped table-bordered">
 								<thead>
 									<tr>
-										<th>Sended date</th>
+										<th>Date</th>
 										<th>ID Content</th>
 										<th>ID user</th>
 										<th>Content text</th>
@@ -459,7 +458,7 @@ Active moderator<br /> <br />
 										
 											<td>{{mod.name}}</td>
 											<td>{{mod.surname}}</td>
-											<td><span ng-if="isOwner(mod)"> <a href="" ng-show="!app.owner"
+											<td><span ng-show="notOwner(mod)"> <a href=""
 													ng-click="deleteModerator(mod._id)"><i
 														class="icon-fixed-width icon-remove"></i></a></span></td>
 

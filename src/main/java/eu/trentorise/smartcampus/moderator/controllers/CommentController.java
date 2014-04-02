@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
 import eu.trentorise.smartcampus.moderator.model.LogContentToModeratorService;
-import eu.trentorise.smartcampus.moderator.model.MessageToMediationService;
 import eu.trentorise.smartcampus.moderator.model.State;
 
 @Controller
@@ -85,7 +84,7 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("manualApproved").is(
 				State.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, ContentToModeratorService.class);
 	}
@@ -105,7 +104,7 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("manualApproved").ne(
 				State.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, ContentToModeratorService.class);
 	}
@@ -169,7 +168,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("timestamp").gte(data));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		// pass all the key or only the reference?
 
@@ -183,7 +182,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("objectId").is(identity));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 		query2.limit(1);
 
 		return db.find(query2, ContentToModeratorService.class);
@@ -198,7 +197,7 @@ public class CommentController {
 		Query query2 = new Query(new Criteria().andOperator(
 				Criteria.where("timestamp").gte(fromdata),
 				Criteria.where("timestamp").lte(todata)));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, ContentToModeratorService.class);
 	}
@@ -210,7 +209,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("objectId").is(identity));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		ContentToModeratorService toDelete=db.findOne(query2, ContentToModeratorService.class);
 		LogContentToModeratorService deletedmessage=new LogContentToModeratorService(toDelete, app,LogContentToModeratorService.ACTION_DELETE);

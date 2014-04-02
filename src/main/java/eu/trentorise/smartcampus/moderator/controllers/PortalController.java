@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import eu.trentorise.smartcampus.aac.AACException;
@@ -97,6 +98,7 @@ public class PortalController extends SCController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("token", getToken(request));
 		model.put("appsFromDb", getApps(request));
+		model.put("aacExtURL", aacExtURL);
 		BasicProfile user=profileService.getBasicProfile(getToken(request));
 		model.put("user", user.getSurname()+","+user.getName());
 		return new ModelAndView("index", model);
@@ -124,7 +126,11 @@ public class PortalController extends SCController {
 		return new ModelAndView("redirect:/");
 	}
 
-	
+	@RequestMapping(method = RequestMethod.GET, value = "/profiles")
+	public @ResponseBody List<BasicProfile> getProfiles(HttpServletRequest request) throws SecurityException, ProfileServiceException {
+		String token = getToken(request);
+		return profileService.getBasicProfiles(null, token);
+	} 
 
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
 	public ModelAndView secure(HttpServletRequest request) {
@@ -175,7 +181,7 @@ public class PortalController extends SCController {
 		}
 		
 		Query findModeratorAndOwner = new Query();
-		findModeratorAndOwner.addCriteria(Criteria.where("userId").regex(x.getUserId()));		
+		findModeratorAndOwner.addCriteria(Criteria.where("userId").is(x.getUserId()));		
 	
 		List<ModeratorForApps> listModeratorForApps= db.find(findModeratorAndOwner, ModeratorForApps.class);
 		
