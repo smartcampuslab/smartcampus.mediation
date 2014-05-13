@@ -86,7 +86,9 @@ app.controller('MainCtrl',
 						Authorization : 'Bearer ' + $scope.app.appToken
 					}
 				}).success(function(data) {
+
 					$scope.remoteComment = data;
+					
 					var notCheck=0;
 					for(var i =0;i<data.length;i++)
 						if(data[i].manualApproved=="WAITING")

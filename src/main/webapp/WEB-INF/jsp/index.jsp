@@ -46,6 +46,7 @@ var token="<%=request.getAttribute("token")%>";
 var appsFromDb=<%=request.getAttribute("appsFromDb")%>;
 var user_name="<%=request.getAttribute("user")%>";
 
+
 </script>
 
 
@@ -133,7 +134,8 @@ var user_name="<%=request.getAttribute("user")%>";
 							<table class="table table-striped table-bordered">
 								<thead>
 									<tr>
-										<th>Date</th>
+										<th>Sended date</th>
+										<th>Subject</th>
 										<th>ID Content</th>
 										<th>ID user</th>
 										<th>Content text</th>
@@ -146,6 +148,7 @@ var user_name="<%=request.getAttribute("user")%>";
 									ng-repeat="comment in remoteComment | filter:q  | startFrom:currentPageFiltro2*pageSize | limitTo:pageSize">
 									<tr>
 										<td>{{comment.timestamp | dateformat}}</td>
+										<td>{{comment.subject}}</td>
 										<td>{{comment.objectId}}</td>
 										<td>{{comment.userid}}</td>
 										<td><a href="" ng-click="viewtext(comment.objectText)">{{comment.objectText|truncate}}</a></td>
@@ -458,7 +461,7 @@ Active moderator<br /> <br />
 										
 											<td>{{mod.name}}</td>
 											<td>{{mod.surname}}</td>
-											<td><span ng-show="notOwner(mod)"> <a href=""
+											<td><span ng-if="isOwner(mod)"> <a href="" ng-show="!app.owner"
 													ng-click="deleteModerator(mod._id)"><i
 														class="icon-fixed-width icon-remove"></i></a></span></td>
 

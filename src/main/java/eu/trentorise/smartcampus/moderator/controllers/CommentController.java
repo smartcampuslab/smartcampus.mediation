@@ -59,8 +59,9 @@ public class CommentController {
 		ContentToModeratorService mediationService = messageToMediationService;
 
 		db.save(mediationService);
-		
-		LogContentToModeratorService deletedmessage=new LogContentToModeratorService(mediationService, app,LogContentToModeratorService.ACTION_ADD);
+
+		LogContentToModeratorService deletedmessage = new LogContentToModeratorService(
+				mediationService, app, LogContentToModeratorService.ACTION_ADD);
 		db.save(deletedmessage);
 
 		Query query2 = new Query();
@@ -84,7 +85,7 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("manualApproved").is(
 				State.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		return db.find(query2, ContentToModeratorService.class);
 	}
@@ -93,7 +94,8 @@ public class CommentController {
 	 * 
 	 * @param request
 	 * @param app
-	 * @return all comments with state of approvation is different to NOT_REQUEST of an app
+	 * @return all comments with state of approvation is different to
+	 *         NOT_REQUEST of an app
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/remote/{app}/all")
 	public @ResponseBody
@@ -104,12 +106,12 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("manualApproved").ne(
 				State.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
-		return db.find(query2, ContentToModeratorService.class);
+		List<ContentToModeratorService> listComments = db.find(query2, ContentToModeratorService.class);
+		return listComments;
 	}
 
-	
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/app/{app}/note/add")
 	public @ResponseBody
 	boolean addNote(HttpServletRequest request, @PathVariable String _id,
@@ -145,8 +147,9 @@ public class CommentController {
 		ContentToModeratorService mediationService = db.findOne(query2,
 				ContentToModeratorService.class);
 
-		mediationService.setManualApproved(State.valueOf(stato)); 		
-		LogContentToModeratorService deletedmessage=new LogContentToModeratorService(mediationService, app,stato);
+		mediationService.setManualApproved(State.valueOf(stato));
+		LogContentToModeratorService deletedmessage = new LogContentToModeratorService(
+				mediationService, app, stato);
 		db.save(deletedmessage);
 
 		db.save(mediationService);
@@ -168,7 +171,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("timestamp").gte(data));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		// pass all the key or only the reference?
 
@@ -182,7 +185,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("objectId").is(identity));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 		query2.limit(1);
 
 		return db.find(query2, ContentToModeratorService.class);
@@ -197,7 +200,7 @@ public class CommentController {
 		Query query2 = new Query(new Criteria().andOperator(
 				Criteria.where("timestamp").gte(fromdata),
 				Criteria.where("timestamp").lte(todata)));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
 		return db.find(query2, ContentToModeratorService.class);
 	}
@@ -209,29 +212,38 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("objectId").is(identity));
-		query2.addCriteria(Criteria.where("webappname").is(app));
+		query2.addCriteria(Criteria.where("webappname").regex(app));
 
-		ContentToModeratorService toDelete=db.findOne(query2, ContentToModeratorService.class);
-		LogContentToModeratorService deletedmessage=new LogContentToModeratorService(toDelete, app,LogContentToModeratorService.ACTION_DELETE);
+		ContentToModeratorService toDelete = db.findOne(query2,
+				ContentToModeratorService.class);
+		LogContentToModeratorService deletedmessage = new LogContentToModeratorService(
+				toDelete, app, LogContentToModeratorService.ACTION_DELETE);
 		db.save(deletedmessage);
 		db.remove(toDelete);
-		
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/web/massive/import")
 	public @ResponseBody
-	void massive_import(HttpServletRequest request,@RequestBody ArrayList<LinkedHashMap<String,Object>> messages) {
-		
-		for(LinkedHashMap<String,Object> index:messages){
-			//{"_id":"52ce5c9d975a22c092435ca4","parseApproved":true,"mediationApproved":"NOT_REQUEST","timestamp":1389255837563,"webappname":"ifame","entityId":167,"entityTesto":"Davvero buona","note":"null","userid":"232"}
-			ContentToModeratorService newIndex= new ContentToModeratorService( String.valueOf(index.get("webappname")), String.valueOf(index.get("entityId")),  String.valueOf(index.get("entityTesto")), index.get("userid").toString());
-			newIndex.setTimestamp(Long.valueOf(index.get("timestamp").toString()));
-			newIndex.setKeywordApproved(Boolean.valueOf(index.get("parseApproved").toString()));
-			newIndex.setManualApproved(State.valueOf(index.get("mediationApproved").toString()));
+	void massive_import(HttpServletRequest request,
+			@RequestBody ArrayList<LinkedHashMap<String, Object>> messages) {
+
+		for (LinkedHashMap<String, Object> index : messages) {
+			// {"_id":"52ce5c9d975a22c092435ca4","parseApproved":true,"mediationApproved":"NOT_REQUEST","timestamp":1389255837563,"webappname":"ifame","entityId":167,"entityTesto":"Davvero buona","note":"null","userid":"232"}
+			ContentToModeratorService newIndex = new ContentToModeratorService(
+					String.valueOf(index.get("webappname")),
+					String.valueOf(index.get("entityId")), String.valueOf(index
+							.get("entityTesto")), index.get("userid")
+							.toString());
+			newIndex.setTimestamp(Long.valueOf(index.get("timestamp")
+					.toString()));
+			newIndex.setKeywordApproved(Boolean.valueOf(index.get(
+					"parseApproved").toString()));
+			newIndex.setManualApproved(State.valueOf(index.get(
+					"mediationApproved").toString()));
 			newIndex.setNote(index.get("note").toString());
 			db.save(newIndex);
-		
+
 		}
 
 	}

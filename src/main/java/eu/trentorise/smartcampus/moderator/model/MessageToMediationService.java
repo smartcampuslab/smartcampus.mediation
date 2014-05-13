@@ -15,6 +15,7 @@ public class MessageToMediationService implements Serializable {
 	private String entityTesto;
 	private String note;
 	private String userid;
+	private String subject;
 
 	/**
          * 
@@ -32,6 +33,23 @@ public class MessageToMediationService implements Serializable {
 		this.setUserid(userid);
 	}
 
+	public MessageToMediationService(String webappname, String objectId,
+			String entityText, String subject, String userid) {
+		this.setWebappname(webappname);
+		this.timestamp = System.currentTimeMillis();
+		this.mediationApproved = true;
+		this.parseApproved = true;
+		this.setEntityId(entityId);
+		this.setEntityTesto(entityTesto);
+		this.setUserid(userid);
+		this.setSubject(subject);
+	}
+
+	
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	
 	public boolean isParseApproved() {
 		return parseApproved;
 	}
@@ -131,4 +149,10 @@ public class MessageToMediationService implements Serializable {
 	public void setUserid(String userid) {
 		this.userid = userid;
 	}
+
+	public String getSubject() {
+		return subject;
+	}
+	
+	
 }

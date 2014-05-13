@@ -13,30 +13,48 @@ public class ContentToModeratorService implements Serializable {
 	private String objectText;
 	private String note;
 	private String userid;
+	private String subject;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	public ContentToModeratorService(){
+
+	public ContentToModeratorService() {
 		this.timestamp = System.currentTimeMillis();
 		this.setManualApproved(State.WAITING);
 		this.setKeywordApproved(true);
 	}
 
-	public ContentToModeratorService(String webappname, String entityId,
-			String entityTesto, String userid) {
+	// local validation
+	public ContentToModeratorService(String webappname, String objectId,
+			String entityText, String userid) {
 		this.setWebappname(webappname);
 		this.timestamp = System.currentTimeMillis();
 		this.setManualApproved(State.WAITING);
 		this.setKeywordApproved(true);
-		this.setObjectId(entityId);
-		this.setObjectText(entityTesto);
+		this.setObjectId(objectId);
+		this.setObjectText(entityText);
 		this.setUserid(userid);
 	}
 
-	
+	// remote validation
+	public ContentToModeratorService(String webappname, String objectId,
+			String entityText, String subject, String userid) {
+		this.setWebappname(webappname);
+		this.timestamp = System.currentTimeMillis();
+		this.setManualApproved(State.WAITING);
+		this.setKeywordApproved(true);
+		this.setObjectId(objectId);
+		this.setObjectText(entityText);
+		this.setSubject(subject);
+		this.setUserid(userid);
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 	public String getWebappname() {
 		return webappname;
 	}
@@ -52,7 +70,7 @@ public class ContentToModeratorService implements Serializable {
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	public String getNote() {
 		return note;
 	}
@@ -109,6 +127,10 @@ public class ContentToModeratorService implements Serializable {
 		this.objectId = objectId;
 	}
 
+	public String getSubject() {
+		return subject;
+	}
+	
 	
 
 }
