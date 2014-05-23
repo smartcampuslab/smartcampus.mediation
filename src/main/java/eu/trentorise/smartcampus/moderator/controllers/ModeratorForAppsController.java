@@ -149,7 +149,7 @@ public class ModeratorForAppsController extends SCController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/web/moderator/app/{app}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/web/moderator/app/{app:.*}")
 	public @ResponseBody
 	ModeratorForApps updateModerator(HttpServletRequest request,
 			@PathVariable String app,

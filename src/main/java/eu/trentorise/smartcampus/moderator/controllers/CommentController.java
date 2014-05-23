@@ -164,7 +164,7 @@ public class CommentController {
 	 * @param app
 	 * @return all comments greater than a date or equal, of an app
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/data/{data}/{app}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/comment/data/{data}/{app:.*}")
 	public @ResponseBody
 	List<ContentToModeratorService> exportComment(HttpServletRequest request,
 			@PathVariable String app, @PathVariable long data) {
@@ -178,7 +178,7 @@ public class CommentController {
 		return db.find(query2, ContentToModeratorService.class);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/content/id/{identity}/{app}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/content/id/{identity}/{app:.*}")
 	public @ResponseBody
 	List<ContentToModeratorService> getContentById(HttpServletRequest request,
 			@PathVariable String app, @PathVariable String identity) {
@@ -191,7 +191,7 @@ public class CommentController {
 		return db.find(query2, ContentToModeratorService.class);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/content/from/{fromdata}/to/{todata}/{app}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/content/from/{fromdata}/to/{todata}/{app:.*}")
 	public @ResponseBody
 	List<ContentToModeratorService> getContentById(HttpServletRequest request,
 			@PathVariable String app, @PathVariable long fromdata,
@@ -205,7 +205,7 @@ public class CommentController {
 		return db.find(query2, ContentToModeratorService.class);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/content/id/{identity}/{app}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/content/id/{identity}/{app:.*}")
 	public @ResponseBody
 	void deleteContentById(HttpServletRequest request,
 			@PathVariable String app, @PathVariable String identity) {
