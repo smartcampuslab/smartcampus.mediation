@@ -47,11 +47,11 @@ public class ModeratorForAppsController extends SCController {
 	private String aacURL;
 
 	@Autowired
-	@Value("${smartcampus.clientId}")
+	@Value("${platform.clientId}")
 	private String client_id;
 
 	@Autowired
-	@Value("${smartcampus.clientSecret}")
+	@Value("${platform.clientSecret}")
 	private String client_secret;
 
 	@Autowired
