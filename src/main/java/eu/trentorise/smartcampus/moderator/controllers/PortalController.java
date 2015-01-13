@@ -166,7 +166,7 @@ public class PortalController extends SCController {
 		List<AppAndToken> listAppToWeb=new ArrayList<AppAndToken>();
 		
 		for(ResourceParameter rp : lstResourceParameters){
-			if (!MODERATOR_SERVICE_ID.equals(rp.getServiceId()) && !MODERATOR_RESOURCE_PARAMETER_ID.equals(rp.getResourceId())) continue;
+			if (!MODERATOR_SERVICE_ID.equals(rp.getServiceId()) && !MODERATOR_RESOURCE_PARAMETER_ID.equals(rp.getParameter())) continue;
 			
 			
 			Query q = Query.query(Criteria

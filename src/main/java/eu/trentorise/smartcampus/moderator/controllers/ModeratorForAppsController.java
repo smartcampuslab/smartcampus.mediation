@@ -98,7 +98,7 @@ public class ModeratorForAppsController extends SCController {
 		for (ResourceParameter rp : lstResourceParameters) {
 			if (!MODERATOR_SERVICE_ID.equals(rp.getServiceId())
 					&& !MODERATOR_RESOURCE_PARAMETER_ID.equals(rp
-							.getResourceId()))
+							.getParameter()))
 				continue;
 			if (rp.getValue().compareTo(app) == 0) {
 				clientIdOfApp = rp.getClientId();
