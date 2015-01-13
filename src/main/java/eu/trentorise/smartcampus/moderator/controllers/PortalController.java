@@ -141,7 +141,7 @@ public class PortalController extends SCController {
 								.generateAuthorizationURIForCodeFlow(
 										redirectUri,
 										null,
-										"smartcampus.profile.basicprofile.me,smartcampus.profile.accountprofile.me,smartcampus.profile.basicprofile.all",
+										"profile.basicprofile.me,profile.accountprofile.me,profile.basicprofile.all",
 										null));
 	}
 
