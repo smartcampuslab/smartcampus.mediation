@@ -115,7 +115,7 @@ public class CommentController {
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/comment/{_id}/app/{app}/note/add")
 	public @ResponseBody
 	boolean addNote(HttpServletRequest request, @PathVariable String _id,
-			@PathVariable String app, @RequestParam String note) {
+			@PathVariable String app, @RequestBody String note) {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("_id").is(_id));
