@@ -66,8 +66,6 @@ public class CommentController {
 		if (oldComment != null) {
 			if (!newComment.getManualApproved().equals(State.NOT_REQUEST)) {
 				newComment.setKeywordApproved(oldComment.isKeywordApproved());
-			} else {
-				newComment.setManualApproved(oldComment.getManualApproved());
 			}
 			newComment.setObjectId(oldComment.getObjectId());
 			newComment.set_id(oldComment.get_id());
