@@ -62,8 +62,7 @@ public class CommentController {
 				.and("webappname").is(app));
 		
 		ContentToModeratorService oldComment = db.findOne(query, ContentToModeratorService.class);
-		ContentToModeratorService newComment = null;
-		newComment = mediationService;
+		ContentToModeratorService newComment = mediationService;
 		if (oldComment != null) {
 			if (!newComment.getManualApproved().equals(State.NOT_REQUEST)) {
 				newComment.setKeywordApproved(oldComment.isKeywordApproved());
@@ -71,6 +70,8 @@ public class CommentController {
 			newComment.setObjectId(oldComment.getObjectId());
 			newComment.set_id(oldComment.get_id());
 		}
+		
+		db.save(newComment);
 
 		LogContentToModeratorService deletedmessage = new LogContentToModeratorService(
 				newComment, app, LogContentToModeratorService.ACTION_ADD);
