@@ -56,18 +56,28 @@ public class CommentController {
 			@RequestBody ContentToModeratorService messageToMediationService,
 			@PathVariable String app) {
 
+		
 		ContentToModeratorService mediationService = messageToMediationService;
-
-		db.save(mediationService);
+		Query query = Query.query(Criteria.where("objectId").is(mediationService.getObjectId()));
+		
+		ContentToModeratorService oldComment = db.findOne(query, ContentToModeratorService.class);
+		ContentToModeratorService newComment = null;
+		newComment = mediationService;
+		if (oldComment != null) {
+			if (!newComment.getManualApproved().equals(State.NOT_REQUEST)) {
+				newComment.setKeywordApproved(oldComment.isKeywordApproved());
+			} else {
+				newComment.setManualApproved(oldComment.getManualApproved());
+			}
+			newComment.setObjectId(oldComment.getObjectId());
+			newComment.set_id(oldComment.get_id());
+		}
 
 		LogContentToModeratorService deletedmessage = new LogContentToModeratorService(
-				mediationService, app, LogContentToModeratorService.ACTION_ADD);
+				newComment, app, LogContentToModeratorService.ACTION_ADD);
 		db.save(deletedmessage);
 
-		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("objectId").is(
-				mediationService.getObjectId()));
-		return db.findOne(query2, ContentToModeratorService.class) != null;
+		return db.findOne(query, ContentToModeratorService.class) != null;
 	}
 
 	/**
