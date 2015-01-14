@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.moderator.model.ContentToModeratorService;
@@ -58,7 +57,9 @@ public class CommentController {
 
 		
 		ContentToModeratorService mediationService = messageToMediationService;
-		Query query = Query.query(Criteria.where("objectId").is(mediationService.getObjectId()));
+		Query query = Query.query(
+				Criteria.where("objectId").is(mediationService.getObjectId())
+				.and("webappname").is(app));
 		
 		ContentToModeratorService oldComment = db.findOne(query, ContentToModeratorService.class);
 		ContentToModeratorService newComment = null;
@@ -93,7 +94,7 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("manualApproved").is(
 				State.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, ContentToModeratorService.class);
 	}
@@ -114,7 +115,7 @@ public class CommentController {
 		query2.sort().on("timestamp", Order.DESCENDING);
 		query2.addCriteria(Criteria.where("manualApproved").ne(
 				State.NOT_REQUEST));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		List<ContentToModeratorService> listComments = db.find(query2, ContentToModeratorService.class);
 		return listComments;
@@ -126,7 +127,7 @@ public class CommentController {
 			@PathVariable String app, @RequestBody String note) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("_id").is(_id));
+		query2.addCriteria(Criteria.where("_id").is(_id).and("webappname").is(app));
 		ContentToModeratorService mediationService = db.findOne(query2,
 				ContentToModeratorService.class);
 
@@ -151,7 +152,7 @@ public class CommentController {
 			@PathVariable String stato) {
 
 		Query query2 = new Query();
-		query2.addCriteria(Criteria.where("_id").is(_id));
+		query2.addCriteria(Criteria.where("_id").is(_id).and("webappname").is(app));
 		ContentToModeratorService mediationService = db.findOne(query2,
 				ContentToModeratorService.class);
 
@@ -179,7 +180,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("timestamp").gte(data));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		// pass all the key or only the reference?
 
@@ -193,7 +194,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("objectId").is(identity));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 		query2.limit(1);
 
 		return db.find(query2, ContentToModeratorService.class);
@@ -208,7 +209,7 @@ public class CommentController {
 		Query query2 = new Query(new Criteria().andOperator(
 				Criteria.where("timestamp").gte(fromdata),
 				Criteria.where("timestamp").lte(todata)));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		return db.find(query2, ContentToModeratorService.class);
 	}
@@ -220,7 +221,7 @@ public class CommentController {
 
 		Query query2 = new Query();
 		query2.addCriteria(Criteria.where("objectId").is(identity));
-		query2.addCriteria(Criteria.where("webappname").regex(app));
+		query2.addCriteria(Criteria.where("webappname").is(app));
 
 		ContentToModeratorService toDelete = db.findOne(query2,
 				ContentToModeratorService.class);
